@@ -113,9 +113,9 @@ public class Scoop {
     private SparseArray<Topping> mToppings = new SparseArray<>();
 
     /**
-     * Mapping of all the bindings per class
+     * Mapping of all the bindings per object
      */
-    private HashMap<Class, Set<IBinding>> mBindings = new HashMap<>();
+    private HashMap<Object, Set<IBinding>> mBindings = new HashMap<>();
 
     /**
      * The index of the default flavor value
@@ -267,14 +267,14 @@ public class Scoop {
     /**
      * Get the set of bindings for a given class
      *
-     * @param clazz the class key for the bindings to look up
+     * @param obj the object key for the bindings to look up
      * @return the set of bindings for the class
      */
-    private Set<IBinding> getBindings(Class clazz) {
-        Set<IBinding> bindings = mBindings.get(clazz);
+    private Set<IBinding> getBindings(Object obj) {
+        Set<IBinding> bindings = mBindings.get(obj);
         if (bindings == null) {
             bindings = new HashSet<>();
-            mBindings.put(clazz, bindings);
+            mBindings.put(obj, bindings);
         }
         return bindings;
     }
@@ -584,13 +584,13 @@ public class Scoop {
      * @param obj the class/object that you previously made bindings to (i.e. an Activity, or Fragment)
      */
     public void unbind(Object obj) {
-        Set<IBinding> bindings = getBindings(obj.getClass());
+        Set<IBinding> bindings = getBindings(obj);
         for (IBinding binding : bindings) {
             binding.unbind();
         }
 
         // Clear the bindings out of the map
-        mBindings.remove(obj.getClass());
+        mBindings.remove(obj);
     }
 
     /**
@@ -615,6 +615,36 @@ public class Scoop {
                     if (binding.getToppingId() == toppingId) {
                         binding.update(topping);
                     }
+                }
+            }
+        }
+        return this;
+    }
+
+    /**
+     * Update a topping, i.e. color property, with a new color and therefore sending it out to
+     * bindings of object obj
+     *
+     * @param obj object to update toppings for
+     * @param toppingId the id of the topping you wish to update
+     * @param color     the updated color to update to
+     * @return self for chaining.
+     */
+    public Scoop update(Object obj, int toppingId, @ColorInt int color) {
+
+        // Get the topping
+        Topping topping = mToppings.get(toppingId);
+        if (topping != null) {
+            topping.updateColor(color);
+
+            // Update bindings
+            Set<IBinding> bindings = mBindings.get(obj);
+            if (bindings == null)
+                return this;
+
+            for (IBinding binding : bindings) {
+                if (binding.getToppingId() == toppingId) {
+                    binding.update(topping);
                 }
             }
         }

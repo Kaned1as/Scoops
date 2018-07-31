@@ -40,6 +40,6 @@ dependencies {
 
     implementation deps.timber
 
-    compile project(':scoops')
+    implementation project(':scoops')
     annotationProcessor project(':scoops-compiler')
 }
