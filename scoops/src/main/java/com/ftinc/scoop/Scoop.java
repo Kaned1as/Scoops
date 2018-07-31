@@ -470,7 +470,7 @@ public class Scoop {
         }
 
         // add to system
-        Set<IBinding> _bindings = getBindings(activity.getClass());
+        Set<IBinding> _bindings = getBindings(activity);
         _bindings.addAll(bindings);
     }
 
@@ -572,7 +572,7 @@ public class Scoop {
         autoUpdateBinding(binding, topping);
 
         // Store binding
-        Set<IBinding> bindings = getBindings(obj.getClass());
+        Set<IBinding> bindings = getBindings(obj);
         bindings.add(binding);
 
         return this;
@@ -625,7 +625,7 @@ public class Scoop {
      * Update a topping, i.e. color property, with a new color and therefore sending it out to
      * bindings of object obj
      *
-     * @param obj object to update toppings for
+     * @param obj object to update toppings for.
      * @param toppingId the id of the topping you wish to update
      * @param color     the updated color to update to
      * @return self for chaining.
