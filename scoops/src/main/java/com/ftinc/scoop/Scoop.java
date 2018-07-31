@@ -61,17 +61,17 @@ public class Scoop {
     private static Scoop _instance = null;
 
     // TODO: Find a better name for this
-    public static Scoop getInstance(){
-        if(_instance == null) _instance = new Scoop();
+    public static Scoop getInstance() {
+        if (_instance == null) _instance = new Scoop();
         return _instance;
     }
 
     /**
      * Create a builder instance for this class to initialize the library
      *
-     * @return      the Builder to initialize the library with
+     * @return the Builder to initialize the library with
      */
-    public static Builder waffleCone(){
+    public static Builder waffleCone() {
         return new Builder();
     }
 
@@ -80,7 +80,7 @@ public class Scoop {
      * the bind methods
      */
     @Deprecated
-    public static SugarCone sugarCone(){
+    public static SugarCone sugarCone() {
         Scoop instance = getInstance();
         instance.checkInit();
         return instance.mSugarCone;
@@ -145,7 +145,8 @@ public class Scoop {
     /**
      * Private constructor to prevent initialization
      */
-    private Scoop(){}
+    private Scoop() {
+    }
 
     /***********************************************************************************************
      *
@@ -155,11 +156,12 @@ public class Scoop {
 
     /**
      * Initialize this helper class with the provided builder
+     *
      * @param builder
      */
-    private void initialize(Builder builder){
+    private void initialize(Builder builder) {
         // Validate builder
-        if(builder.prefs != null && !builder.flavors.isEmpty()){
+        if (builder.prefs != null && !builder.flavors.isEmpty()) {
 
             // Set Preference Storage
             mPreferences = builder.prefs;
@@ -168,7 +170,7 @@ public class Scoop {
             mFlavors = new ArrayList<>(builder.flavors);
 
             // Set the default flavor if configured
-            if(builder.defaultFlavor != null){
+            if (builder.defaultFlavor != null) {
                 mDefaultFlavorIndex = mFlavors.indexOf(builder.defaultFlavor);
             }
 
@@ -178,7 +180,7 @@ public class Scoop {
             // Set init flag
             mInitialized = true;
 
-        }else {
+        } else {
             throw new IllegalStateException("SharedPreferences and at least one flavor must be set");
         }
     }
@@ -186,16 +188,16 @@ public class Scoop {
     /**
      * Get the index of the current configured flavor
      *
-     * @return      the index of the current flavor to apply
+     * @return the index of the current flavor to apply
      */
-    private int getCurrentFlavorIndex(){
+    private int getCurrentFlavorIndex() {
         checkInit();
 
         // Get the selected flavor index from the preference storage
         int flavorIndex = mPreferences.getInt(PREFERENCE_FLAVOR_KEY, mDefaultFlavorIndex);
 
         // Verify that index is valid
-        if(flavorIndex > -1 && flavorIndex < mFlavors.size()){
+        if (flavorIndex > -1 && flavorIndex < mFlavors.size()) {
             return flavorIndex;
         }
 
@@ -205,12 +207,12 @@ public class Scoop {
     /**
      * Get the current selected scoop of flavor
      *
-     * @param excludeDefault        whether or not to return null if the current selected is the default theme
-     * @return                      the current scoop of flavor
+     * @param excludeDefault whether or not to return null if the current selected is the default theme
+     * @return the current scoop of flavor
      */
-    private Flavor getCurrentFlavor(boolean excludeDefault){
+    private Flavor getCurrentFlavor(boolean excludeDefault) {
         int index = getCurrentFlavorIndex();
-        if(index != mDefaultFlavorIndex || !excludeDefault) {
+        if (index != mDefaultFlavorIndex || !excludeDefault) {
             return mFlavors.get(index);
         }
         return null;
@@ -219,18 +221,20 @@ public class Scoop {
     /**
      * Verify the initialization state of the utility
      */
-    private void checkInit(){
-        if(!mInitialized) throw new IllegalStateException("Scoop needs to be initialized first!");
+    private void checkInit() {
+        if (!mInitialized) throw new IllegalStateException("Scoop needs to be initialized first!");
     }
 
-    @NonNull @UiThread
+    @NonNull
+    @UiThread
     private ToppingBinder<Object> getViewBinder(@NonNull Object target) {
         Class<?> targetClass = target.getClass();
         if (debug) Log.d(TAG, "Looking up topping binder for " + targetClass.getName());
         return findViewBinderForClass(targetClass);
     }
 
-    @NonNull @UiThread
+    @NonNull
+    @UiThread
     private ToppingBinder<Object> findViewBinderForClass(Class<?> cls) {
         ToppingBinder<Object> viewBinder = BINDERS.get(cls);
         if (viewBinder != null) {
@@ -263,12 +267,12 @@ public class Scoop {
     /**
      * Get the set of bindings for a given class
      *
-     * @param clazz     the class key for the bindings to look up
-     * @return          the set of bindings for the class
+     * @param clazz the class key for the bindings to look up
+     * @return the set of bindings for the class
      */
-    private Set<IBinding> getBindings(Class clazz){
+    private Set<IBinding> getBindings(Class clazz) {
         Set<IBinding> bindings = mBindings.get(clazz);
-        if(bindings == null){
+        if (bindings == null) {
             bindings = new HashSet<>();
             mBindings.put(clazz, bindings);
         }
@@ -278,12 +282,12 @@ public class Scoop {
     /**
      * Find the {@link Topping} object for it's given Id or create one if not found
      *
-     * @param toppingId         the id of the topping to get
-     * @return                  the topping associated with the id
+     * @param toppingId the id of the topping to get
+     * @return the topping associated with the id
      */
-    private Topping getOrCreateTopping(int toppingId){
+    private Topping getOrCreateTopping(int toppingId) {
         Topping topping = mToppings.get(toppingId);
-        if(topping == null){
+        if (topping == null) {
             topping = new Topping(toppingId);
             mToppings.put(toppingId, topping);
         }
@@ -291,8 +295,8 @@ public class Scoop {
         return topping;
     }
 
-    private void autoUpdateBinding(IBinding binding, Topping topping){
-        if(topping.getColor() != 0) {
+    private void autoUpdateBinding(IBinding binding, Topping topping) {
+        if (topping.getColor() != 0) {
             if (binding instanceof AnimatedBinding) {
                 ((AnimatedBinding) binding).update(topping, false);
             } else {
@@ -310,17 +314,17 @@ public class Scoop {
     /**
      * Enable debug logging
      */
-    public static void setDebug(boolean flag){
+    public static void setDebug(boolean flag) {
         debug = flag;
     }
 
     /**
      * Get the selected day night mode to use with certain themes
      *
-     * @return      the day night mode to use
+     * @return the day night mode to use
      */
     @AppCompatDelegate.NightMode
-    public int getDayNightMode(){
+    public int getDayNightMode() {
         checkInit();
         return mPreferences.getInt(PREFERENCE_DAYNIGHT_KEY, AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM);
     }
@@ -330,30 +334,30 @@ public class Scoop {
      *
      * @return
      */
-    public List<Flavor> getFlavors(){
+    public List<Flavor> getFlavors() {
         return Collections.unmodifiableList(mFlavors);
     }
 
     /**
      * Get the current flavor to apply
      *
-     * @return      one scoop of ice cream
+     * @return one scoop of ice cream
      */
-    public Flavor getCurrentFlavor(){
+    public Flavor getCurrentFlavor() {
         return getCurrentFlavor(false);
     }
 
     /**
      * Apply the current {@link Flavor} to the given activity based on the user's selected preference.
      *
-     * @param activity      the activity to apply the selected theme configuration to
+     * @param activity the activity to apply the selected theme configuration to
      */
     @SuppressWarnings("WrongConstant")
-    public void apply(Activity activity){
+    public void apply(Activity activity) {
         Flavor flavor = getCurrentFlavor(true);
-        if(flavor != null){
+        if (flavor != null) {
             // Apply DayNight mode setting if applicable
-            if(flavor.isDayNight()){
+            if (flavor.isDayNight()) {
                 AppCompatDelegate.setDefaultNightMode(getDayNightMode());
             }
 
@@ -366,14 +370,14 @@ public class Scoop {
      * Apply the current {@link Flavor}s Dialog theme to the activity to give it a Dialog like
      * appearance based on the user selected preference
      *
-     * @param activity      the activity to apply the dialog theme to
+     * @param activity the activity to apply the dialog theme to
      */
     @SuppressWarnings("WrongConstant")
-    public void applyDialog(Activity activity){
+    public void applyDialog(Activity activity) {
         Flavor flavor = getCurrentFlavor(true);
-        if(flavor != null && flavor.getDialogStyleResource() > -1){
+        if (flavor != null && flavor.getDialogStyleResource() > -1) {
             // Apply DayNight mode setting if applicable
-            if(flavor.isDayNight()){
+            if (flavor.isDayNight()) {
                 AppCompatDelegate.setDefaultNightMode(getDayNightMode());
             }
 
@@ -385,10 +389,10 @@ public class Scoop {
     /**
      * Apply the desired theme to an activity and it's window
      *
-     * @param activity      the activity to apply to
-     * @param theme         the theme to apply
+     * @param activity the activity to apply to
+     * @param theme    the theme to apply
      */
-    private void apply(Activity activity, @StyleRes int theme){
+    private void apply(Activity activity, @StyleRes int theme) {
         // Apply theme
         activity.setTheme(theme);
 
@@ -400,20 +404,20 @@ public class Scoop {
     /**
      * Apply the attributed menu item tint to all the icons if the attribute {@link R.attr#toolbarItemTint}
      *
-     * @param context      the application context to derive the attr color from
-     * @param menu          the menu to apply to
+     * @param context the application context to derive the attr color from
+     * @param menu    the menu to apply to
      */
-    public void apply(Context context, Menu menu){
+    public void apply(Context context, Menu menu) {
         Flavor flavor = getCurrentFlavor();
-        if(menu != null && menu.size() > 0 && flavor != null){
+        if (menu != null && menu.size() > 0 && flavor != null) {
             int tint = AttrUtils.getColorAttr(context, flavor.getStyleResource(), R.attr.toolbarItemTint);
             for (int i = 0; i < menu.size(); i++) {
                 MenuItem item = menu.getItem(i);
                 Drawable icon = item.getIcon();
-                if(icon != null){
-                    if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP){
+                if (icon != null) {
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                         icon.setTint(tint);
-                    }else{
+                    } else {
                         icon.setColorFilter(tint, PorterDuff.Mode.SRC_ATOP);
                     }
                 }
@@ -424,7 +428,7 @@ public class Scoop {
     /**
      * Choose a given flavor
      *
-     * @param item      the flavor to scoop
+     * @param item the flavor to scoop
      */
     public void choose(Flavor item) {
         checkInit();
@@ -435,9 +439,9 @@ public class Scoop {
     /**
      * Choose the DayNight mode you want to use for selected day/night mode themes
      *
-     * @param mode      the daynight mode you wish to use
+     * @param mode the daynight mode you wish to use
      */
-    public void chooseDayNightMode(@AppCompatDelegate.NightMode int mode){
+    public void chooseDayNightMode(@AppCompatDelegate.NightMode int mode) {
         checkInit();
         mPreferences.edit().putInt(PREFERENCE_DAYNIGHT_KEY, mode).apply();
     }
@@ -451,13 +455,12 @@ public class Scoop {
     /**
      * Bind all the annotated elements to a given activity
      *
+     * @param activity the activity to bind to
      * @see BindTopping
      * @see BindToppingStatus
-     *
-     * @param activity      the activity to bind to
      */
-    public void bind(Activity activity){
-        // Get the pre-genereated bindings
+    public void bind(Activity activity) {
+        // Get the pre-generated bindings
         List<IBinding> bindings = getViewBinder(activity).bind(activity);
 
         // Iterate and verify topping creation and auto-applying
@@ -474,25 +477,25 @@ public class Scoop {
     /**
      * Bind a view to a topping on a given object
      *
-     * @param obj               the class the view belongs to
-     * @param toppingId         the id of the topping to bind to
-     * @param view              the view to bind
-     * @return                  self for chaining
+     * @param obj       the class the view belongs to
+     * @param toppingId the id of the topping to bind to
+     * @param view      the view to bind
+     * @return self for chaining
      */
-    public Scoop bind(Object obj, int toppingId, View view){
+    public Scoop bind(Object obj, int toppingId, View view) {
         return bind(obj, toppingId, view, null);
     }
 
     /**
      * Bind a view to a topping on a given object with a specified color adapter
      *
-     * @param obj               the classs the view belongs to
-     * @param toppingId         the id of the topping
-     * @param view              the view to bind
-     * @param colorAdapter      the color adapter to bind with
-     * @return                  self for chaining
+     * @param obj          the classs the view belongs to
+     * @param toppingId    the id of the topping
+     * @param view         the view to bind
+     * @param colorAdapter the color adapter to bind with
+     * @return self for chaining
      */
-    public Scoop bind(Object obj, int toppingId, View view, @Nullable ColorAdapter colorAdapter){
+    public Scoop bind(Object obj, int toppingId, View view, @Nullable ColorAdapter colorAdapter) {
         return bind(obj, toppingId, view, colorAdapter, null);
     }
 
@@ -500,17 +503,17 @@ public class Scoop {
      * Bind a view to a topping on a given object with a specified color adapter and change animation
      * interpolator
      *
-     * @param obj               the class the view belongs to
-     * @param toppingId         the id of the topping
-     * @param view              the view to bind
-     * @param colorAdapter      the color adapter to bind with
-     * @param interpolator      the interpolator to use when switching colors
-     * @return                  self for chaining
+     * @param obj          the class the view belongs to
+     * @param toppingId    the id of the topping
+     * @param view         the view to bind
+     * @param colorAdapter the color adapter to bind with
+     * @param interpolator the interpolator to use when switching colors
+     * @return self for chaining
      */
-    public Scoop bind(Object obj, int toppingId, View view, @Nullable ColorAdapter colorAdapter, @Nullable Interpolator interpolator){
+    public Scoop bind(Object obj, int toppingId, View view, @Nullable ColorAdapter colorAdapter, @Nullable Interpolator interpolator) {
 
         // Get a default color adapter if not supplied
-        if(colorAdapter == null){
+        if (colorAdapter == null) {
             colorAdapter = BindingUtils.getColorAdapter(view.getClass());
         }
 
@@ -525,12 +528,12 @@ public class Scoop {
      * Bind the status bar of an activity to a topping so that it's color is updated when the
      * user/developer updates the color for that topping id
      *
-     * @param activity      the activity whoes status bar to bind to
-     * @param toppingId     the id of the topping to bind with
-     * @return              self for chaining
+     * @param activity  the activity whoes status bar to bind to
+     * @param toppingId the id of the topping to bind with
+     * @return self for chaining
      */
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
-    public Scoop bindStatusBar(Activity activity, int toppingId){
+    public Scoop bindStatusBar(Activity activity, int toppingId) {
         return bindStatusBar(activity, toppingId, null);
     }
 
@@ -539,13 +542,13 @@ public class Scoop {
      * user/developer updates the color for that topping id and animation it's color change using
      * the provided interpolator
      *
-     * @param activity      the activity whoes status bar to bind to
-     * @param toppingId     the id of the topping to bind with
-     * @param interpolator  the interpolator that defines how the animation for the color change will run
-     * @return              self for chaining
+     * @param activity     the activity whoes status bar to bind to
+     * @param toppingId    the id of the topping to bind with
+     * @param interpolator the interpolator that defines how the animation for the color change will run
+     * @return self for chaining
      */
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
-    public Scoop bindStatusBar(Activity activity, int toppingId, @Nullable Interpolator interpolator){
+    public Scoop bindStatusBar(Activity activity, int toppingId, @Nullable Interpolator interpolator) {
         IBinding binding = new StatusBarBinding(toppingId, activity, interpolator);
         return bind(activity, toppingId, binding);
     }
@@ -555,12 +558,12 @@ public class Scoop {
      * customize the changes between color on certain properties, i.e. Toppings, to define it
      * to your use case
      *
-     * @param obj               the object to bind on
-     * @param toppingId         the topping id to bind to
-     * @param binding           the binding that defines how your custom properties are updated
-     * @return                  self for chaining
+     * @param obj       the object to bind on
+     * @param toppingId the topping id to bind to
+     * @param binding   the binding that defines how your custom properties are updated
+     * @return self for chaining
      */
-    public Scoop bind(Object obj, int toppingId, IBinding binding){
+    public Scoop bind(Object obj, int toppingId, IBinding binding) {
 
         // Find or Create Topping
         Topping topping = getOrCreateTopping(toppingId);
@@ -578,9 +581,9 @@ public class Scoop {
     /**
      * Unbind all bindings on a certain class
      *
-     * @param obj       the class/object that you previously made bindings to (i.e. an Activity, or Fragment)
+     * @param obj the class/object that you previously made bindings to (i.e. an Activity, or Fragment)
      */
-    public void unbind(Object obj){
+    public void unbind(Object obj) {
         Set<IBinding> bindings = getBindings(obj.getClass());
         for (IBinding binding : bindings) {
             binding.unbind();
@@ -594,31 +597,27 @@ public class Scoop {
      * Update a topping, i.e. color property, with a new color and therefore sending it out to
      * all your bindings
      *
-     * @param toppingId     the id of the topping you wish to update
-     * @param color         the updated color to update to
-     * @return              self for chaining.
+     * @param toppingId the id of the topping you wish to update
+     * @param color     the updated color to update to
+     * @return self for chaining.
      */
-    public Scoop update(int toppingId, @ColorInt int color){
+    public Scoop update(int toppingId, @ColorInt int color) {
 
         // Get the topping
         Topping topping = mToppings.get(toppingId);
-        if(topping != null){
+        if (topping != null) {
             topping.updateColor(color);
 
             // Update bindings
             Collection<Set<IBinding>> bindings = mBindings.values();
             for (Set<IBinding> bindingSet : bindings) {
                 for (IBinding binding : bindingSet) {
-                    if(binding.getToppingId() == toppingId) {
+                    if (binding.getToppingId() == toppingId) {
                         binding.update(topping);
                     }
                 }
             }
-
-        }else{
-            throw new InvalidParameterException("Nothing has been bound to the Topping of the given id (" + toppingId + ").");
         }
-
         return this;
     }
 
@@ -628,48 +627,48 @@ public class Scoop {
      *
      */
 
-    public static class Builder{
+    public static class Builder {
 
         private SharedPreferences prefs;
         private Flavor defaultFlavor;
         private final List<Flavor> flavors;
 
-        Builder(){
+        Builder() {
             flavors = new ArrayList<>();
         }
 
         public Builder addFlavor(String name,
-                                 @StyleRes int styleResourceId){
+                                 @StyleRes int styleResourceId) {
             return addFlavor(name, styleResourceId, -1, false);
         }
 
         public Builder addDayNightFlavor(String name,
-                                 @StyleRes int styleResourceId){
+                                         @StyleRes int styleResourceId) {
             return addFlavor(name, styleResourceId, -1, false, true);
         }
 
         public Builder addFlavor(String name,
                                  @StyleRes int styleResourceId,
-                                 boolean isDefault){
+                                 boolean isDefault) {
             return addFlavor(name, styleResourceId, -1, isDefault);
         }
 
         public Builder addDayNightFlavor(String name,
-                                 @StyleRes int styleResourceId,
-                                 boolean isDefault){
+                                         @StyleRes int styleResourceId,
+                                         boolean isDefault) {
             return addFlavor(name, styleResourceId, -1, isDefault, true);
         }
 
         public Builder addFlavor(String name,
                                  @StyleRes int styleResourceId,
-                                 @StyleRes int dialogStyleResourceId){
+                                 @StyleRes int dialogStyleResourceId) {
             return addFlavor(name, styleResourceId, dialogStyleResourceId, false);
         }
 
         public Builder addFlavor(String name,
                                  @StyleRes int styleResourceId,
                                  @StyleRes int dialogStyleResourceId,
-                                 boolean isDefault){
+                                 boolean isDefault) {
             return addFlavor(name, styleResourceId, dialogStyleResourceId, isDefault, false);
         }
 
@@ -677,38 +676,36 @@ public class Scoop {
                                  @StyleRes int styleResourceId,
                                  @StyleRes int dialogStyleResourceId,
                                  boolean isDefault,
-                                 boolean isDayNight){
+                                 boolean isDayNight) {
             Flavor flavor = new Flavor(name, styleResourceId, dialogStyleResourceId, isDayNight);
-            if(isDefault) defaultFlavor = flavor;
+            if (isDefault) defaultFlavor = flavor;
             return addFlavor(flavor);
         }
 
-        public Builder addFlavor(Flavor... flavor){
+        public Builder addFlavor(Flavor... flavor) {
             flavors.addAll(Arrays.asList(flavor));
             return this;
         }
 
         /**
-         * @deprecated      Toppings no longer need to be pre-instantiated
+         * @deprecated Toppings no longer need to be pre-instantiated
          */
         @Deprecated
-        public Builder addToppings(Topping... toppings){
+        public Builder addToppings(Topping... toppings) {
             // This does nothing now
             return this;
         }
 
-        public Builder setSharedPreferences(SharedPreferences prefs){
+        public Builder setSharedPreferences(SharedPreferences prefs) {
             this.prefs = prefs;
             return this;
         }
 
-        public void initialize(){
-            Scoop.getInstance()
-                    .initialize(this);
+        public void initialize() {
+            Scoop.getInstance().initialize(this);
         }
 
     }
-
 
 
 }

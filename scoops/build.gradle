@@ -2,7 +2,6 @@ apply plugin: 'com.android.library'
 
 android {
     compileSdkVersion rootProject.ext.compileSdkVersion
-    buildToolsVersion rootProject.ext.buildToolsVersion
 
     defaultConfig {
         minSdkVersion rootProject.ext.minSdkVersion
@@ -26,19 +25,19 @@ android {
 }
 
 dependencies {
-    compile project(':scoops-core')
-    compile deps.supportAppCompat
-    compile deps.supportRecyclerView
+    api project(':scoops-core')
+    implementation deps.supportAppCompat
+    implementation deps.supportRecyclerView
 
-    testCompile deps.junit
-    testCompile deps.truth
-    testCompile deps.robolectric
-    testCompile deps.mockito
+    testImplementation deps.junit
+    testImplementation deps.truth
+    testImplementation deps.robolectric
+    testImplementation deps.mockito
 
-    androidTestCompile deps.espresso
-    androidTestCompile deps.runner
-    androidTestCompile deps.supportAnnotations
-    androidTestCompile deps.espressoContrib
+    androidTestImplementation deps.espresso
+    androidTestImplementation deps.runner
+    androidTestImplementation deps.supportAnnotations
+    androidTestImplementation deps.espressoContrib
 }
 
 apply from: rootProject.file('gradle/gradle-mvn-push.gradle')

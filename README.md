@@ -115,7 +115,6 @@ buildscript {
     }
     dependencies {
 	 	...
-    	classpath 'com.neenbedankt.gradle.plugins:android-apt:1.8'
     }
 }
 ```

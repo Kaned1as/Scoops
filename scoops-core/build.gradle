@@ -13,7 +13,7 @@ targetCompatibility = rootProject.ext.targetCompatibilityVersion
 
 dependencies {
     compileOnly deps.android
-    compile deps.supportAnnotations
+    implementation deps.supportAnnotations
 }
 
 apply from: rootProject.file('gradle/gradle-mvn-push.gradle')

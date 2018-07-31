@@ -1,9 +1,7 @@
 apply plugin: 'com.android.application'
-apply plugin: 'android-apt'
 
 android {
     compileSdkVersion rootProject.ext.compileSdkVersion
-    buildToolsVersion rootProject.ext.buildToolsVersion
 
     defaultConfig {
         applicationId "com.ftinc.scoop.example"
@@ -28,20 +26,20 @@ android {
 
 dependencies {
 
-    testCompile deps.junit
-    androidTestCompile deps.espresso
-    androidTestCompile deps.runner
-    androidTestCompile deps.supportAnnotations
+    testImplementation deps.junit
+    androidTestImplementation deps.espresso
+    androidTestImplementation deps.runner
+    androidTestImplementation deps.supportAnnotations
 
-    compile deps.supportAppCompat
-    compile deps.supportRecyclerView
-    compile deps.supportDesign
+    implementation deps.supportAppCompat
+    implementation deps.supportRecyclerView
+    implementation deps.supportDesign
 
-    compile deps.butterknife
-    apt deps.butterknifeCompiler
+    implementation deps.butterknife
+    annotationProcessor deps.butterknifeCompiler
 
-    compile deps.timber
+    implementation deps.timber
 
     compile project(':scoops')
-    apt project(':scoops-compiler')
+    annotationProcessor project(':scoops-compiler')
 }

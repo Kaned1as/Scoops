@@ -12,16 +12,15 @@ sourceCompatibility = rootProject.ext.sourceCompatibilityVersion
 targetCompatibility = rootProject.ext.targetCompatibilityVersion
 
 dependencies {
-    compile project(':scoops-core')
-    compile deps.autoservice
-    compile deps.autocommon
-    compile deps.javapoet
+    implementation project(':scoops-core')
+    implementation deps.autoservice
+    implementation deps.autocommon
+    implementation deps.javapoet
 
-    testCompile deps.android
-    testCompile deps.junit
-    testCompile deps.truth
-    testCompile deps.robolectric
-    testCompile deps.compiletesting
+    testImplementation deps.junit
+    testImplementation deps.truth
+    testImplementation deps.robolectric
+    testImplementation deps.compiletesting
 }
 
 apply from: rootProject.file('gradle/gradle-mvn-push.gradle')
