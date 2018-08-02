@@ -31,11 +31,8 @@ public abstract class AnimatedBinding extends IBinding {
         this.duration = duration;
     }
 
-    public void update(Topping topping, boolean animate){
-        int fromColor = topping.getPreviousColor() != 0 ?
-                topping.getPreviousColor() : getCurrentColor() != 0 ?
-                getCurrentColor() : Color.WHITE;
-        int toColor = topping.getColor();
+    public void update(@ColorInt Integer toColor, boolean animate) {
+        int fromColor = getCurrentColor() != 0 ? getCurrentColor() : Color.WHITE;
 
         if (fromColor != toColor && animate) {
 
@@ -70,8 +67,8 @@ public abstract class AnimatedBinding extends IBinding {
     }
 
     @Override
-    public void update(Topping topping) {
-        update(topping, true);
+    public void update(@ColorInt Integer color) {
+        update(color, true);
     }
 
     @Override

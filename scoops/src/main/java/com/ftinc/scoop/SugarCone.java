@@ -141,7 +141,7 @@ public class SugarCone {
             for (Set<IBinding> bindingSet : bindings) {
                 for (IBinding binding : bindingSet) {
                     if(binding.getToppingId() == toppingId) {
-                        binding.update(topping);
+                        binding.update(topping.color);
                     }
                 }
             }

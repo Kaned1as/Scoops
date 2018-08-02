@@ -12,14 +12,14 @@ import com.ftinc.scoop.adapters.ColorAdapter;
  * Created by r0adkll on 6/17/16.
  */
 
-public class ViewBinding extends AnimatedBinding{
+public class ViewBinding extends AnimatedBinding {
 
     private View mView;
-    private ColorAdapter mColorAdapter;
+    private ColorAdapter<View> mColorAdapter;
 
     public ViewBinding(int toppingId,
                        @NonNull View view,
-                       @NonNull ColorAdapter adapter,
+                       @NonNull ColorAdapter<View> adapter,
                        @Nullable Interpolator interpolator){
         super(toppingId, interpolator);
         mView = view;

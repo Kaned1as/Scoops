@@ -39,9 +39,6 @@ public final class Topping {
     @ColorInt
     int color = 0;
 
-    @ColorInt
-    int previousColor = 0;
-
     /***********************************************************************************************
      *
      * Constructors
@@ -66,12 +63,8 @@ public final class Topping {
         return color;
     }
 
-    public int getPreviousColor() {
-        return previousColor;
-    }
 
-    void updateColor(@ColorInt int color){
-        this.previousColor = this.color;
+    void updateColor(@ColorInt int color) {
         this.color = color;
     }
 
@@ -84,7 +77,7 @@ public final class Topping {
 
         if (id != topping.id) return false;
         if (color != topping.color) return false;
-        return previousColor == topping.previousColor;
+        return true;
 
     }
 
@@ -92,7 +85,6 @@ public final class Topping {
     public int hashCode() {
         int result = id;
         result = 31 * result + color;
-        result = 31 * result + previousColor;
         return result;
     }
 
@@ -101,7 +93,6 @@ public final class Topping {
         return "Topping{" +
                 "id=" + id +
                 ", color=" + color +
-                ", previousColor=" + previousColor +
                 '}';
     }
 }

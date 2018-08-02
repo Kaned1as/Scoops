@@ -1,5 +1,6 @@
 package com.ftinc.scoop.binding;
 
+import android.support.annotation.ColorInt;
 import com.ftinc.scoop.Topping;
 
 /**
@@ -22,7 +23,7 @@ public abstract class IBinding {
         return toppingId;
     }
 
-    public abstract void update(Topping topping);
+    public abstract void update(@ColorInt Integer color);
 
     public abstract void unbind();
 

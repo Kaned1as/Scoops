@@ -298,9 +298,9 @@ public class Scoop {
     private void autoUpdateBinding(IBinding binding, Topping topping) {
         if (topping.getColor() != 0) {
             if (binding instanceof AnimatedBinding) {
-                ((AnimatedBinding) binding).update(topping, false);
+                ((AnimatedBinding) binding).update(topping.color, false);
             } else {
-                binding.update(topping);
+                binding.update(topping.color);
             }
         }
     }
@@ -613,7 +613,7 @@ public class Scoop {
             for (Set<IBinding> bindingSet : bindings) {
                 for (IBinding binding : bindingSet) {
                     if (binding.getToppingId() == toppingId) {
-                        binding.update(topping);
+                        binding.update(topping.color);
                     }
                 }
             }
@@ -632,20 +632,14 @@ public class Scoop {
      */
     public Scoop update(Object obj, int toppingId, @ColorInt int color) {
 
-        // Get the topping
-        Topping topping = mToppings.get(toppingId);
-        if (topping != null) {
-            topping.updateColor(color);
+        // Update bindings
+        Set<IBinding> bindings = mBindings.get(obj);
+        if (bindings == null)
+            return this;
 
-            // Update bindings
-            Set<IBinding> bindings = mBindings.get(obj);
-            if (bindings == null)
-                return this;
-
-            for (IBinding binding : bindings) {
-                if (binding.getToppingId() == toppingId) {
-                    binding.update(topping);
-                }
+        for (IBinding binding : bindings) {
+            if (binding.getToppingId() == toppingId) {
+                binding.update(color);
             }
         }
         return this;

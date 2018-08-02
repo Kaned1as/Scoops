@@ -16,7 +16,7 @@ import com.ftinc.scoop.Topping;
 
 public class StatusBarBinding extends AnimatedBinding {
 
-    // Dragons Beware! This will memory leak if not properly unbinded
+    // Dragons Beware! This will memory leak if not properly unbound
     private Activity mActivity;
 
     public StatusBarBinding(int toppingId, Activity activity, Interpolator interpolator) {
@@ -32,9 +32,9 @@ public class StatusBarBinding extends AnimatedBinding {
 
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     @Override
-    public void update(Topping topping) {
+    public void update(@ColorInt Integer color) {
         if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            super.update(topping);
+            super.update(color);
         }
     }
 
