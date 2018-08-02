@@ -32,7 +32,7 @@ public abstract class AnimatedBinding extends IBinding {
     }
 
     public void update(@ColorInt Integer toColor, boolean animate) {
-        int fromColor = getCurrentColor() != 0 ? getCurrentColor() : Color.WHITE;
+        int fromColor = getCurrentColor() != 0 ? getCurrentColor() : Color.TRANSPARENT;
 
         if (fromColor != toColor && animate) {
 
