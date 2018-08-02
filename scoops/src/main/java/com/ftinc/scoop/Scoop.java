@@ -528,13 +528,14 @@ public class Scoop {
      * Bind the status bar of an activity to a topping so that it's color is updated when the
      * user/developer updates the color for that topping id
      *
+     * @param obj object in scope of which this binding is created
      * @param activity  the activity whoes status bar to bind to
      * @param toppingId the id of the topping to bind with
      * @return self for chaining
      */
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
-    public Scoop bindStatusBar(Activity activity, int toppingId) {
-        return bindStatusBar(activity, toppingId, null);
+    public Scoop bindStatusBar(Object obj, Activity activity, int toppingId) {
+        return bindStatusBar(obj, activity, toppingId, null);
     }
 
     /**
@@ -548,9 +549,9 @@ public class Scoop {
      * @return self for chaining
      */
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
-    public Scoop bindStatusBar(Activity activity, int toppingId, @Nullable Interpolator interpolator) {
+    public Scoop bindStatusBar(Object obj, Activity activity, int toppingId, @Nullable Interpolator interpolator) {
         IBinding binding = new StatusBarBinding(toppingId, activity, interpolator);
-        return bind(activity, toppingId, binding);
+        return bind(obj, toppingId, binding);
     }
 
     /**
