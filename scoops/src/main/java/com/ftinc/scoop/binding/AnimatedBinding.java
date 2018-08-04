@@ -7,15 +7,13 @@ import android.os.Build;
 import android.support.annotation.ColorInt;
 import android.view.animation.Interpolator;
 
-import com.ftinc.scoop.Topping;
-
 /**
  * Project: ThemeEngineTest
  * Package: com.ftinc.scoop.model
  * Created by drew.heavner on 6/21/16.
  */
 
-public abstract class AnimatedBinding extends IBinding {
+public abstract class AnimatedBinding extends AbstractBinding {
 
     private ValueAnimator mAnimator;
     private Interpolator mInterpolator;

@@ -1,5 +1,6 @@
 package com.ftinc.scoop.adapters;
 
+import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.support.annotation.ColorInt;
@@ -21,6 +22,6 @@ public class DefaultColorAdapter implements ColorAdapter<View> {
         if(bg instanceof ColorDrawable){
             return ((ColorDrawable) bg).getColor();
         }
-        return 0;
+        return Color.TRANSPARENT;
     }
 }

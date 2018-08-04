@@ -9,13 +9,13 @@ import com.ftinc.scoop.Topping;
  * Created by drew.heavner on 6/21/16.
  */
 
-public abstract class IBinding {
+public abstract class AbstractBinding {
 
     public static final long DEFAULT_ANIMATION_DURATION = 600L;
 
     protected int toppingId;
 
-    public IBinding(int toppingId){
+    public AbstractBinding(int toppingId){
         this.toppingId = toppingId;
     }
 

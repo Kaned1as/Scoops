@@ -30,7 +30,6 @@ public class StatusBarBinding extends AnimatedBinding {
         mActivity = activity;
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     @Override
     public void update(@ColorInt Integer color) {
         if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {

@@ -1,6 +1,6 @@
 package com.ftinc.scoop.internal;
 
-import com.ftinc.scoop.binding.IBinding;
+import com.ftinc.scoop.binding.AbstractBinding;
 
 import java.util.List;
 
@@ -9,5 +9,5 @@ import java.util.List;
  */
 
 public interface ToppingBinder<T> {
-    List<IBinding> bind(T target);
+    List<AbstractBinding> bind(T target);
 }

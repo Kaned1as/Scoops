@@ -18,42 +18,23 @@ import android.support.annotation.ColorInt;
  */
 public final class Topping {
 
-    /***********************************************************************************************
-     *
-     * DEFAULT FLAVORS
-     *
-     */
-
     public static final int PRIMARY = 0;
     public static final int PRIMARY_DARK = 1;
     public static final int ACCENT = 2;
-
-    /***********************************************************************************************
-     *
-     * Variables
-     *
-     */
 
     final int id;
 
     @ColorInt
     int color = 0;
 
-    /***********************************************************************************************
-     *
-     * Constructors
-     *
-     */
-
-    Topping(int id){
+    Topping(int id) {
         this.id = id;
     }
 
-    /***********************************************************************************************
-     *
-     * Getters
-     *
-     */
+    Topping(int id, @ColorInt int color) {
+        this.id = id;
+        this.color = color;
+    }
 
     public int getId(){
         return id;
@@ -62,7 +43,6 @@ public final class Topping {
     public int getColor() {
         return color;
     }
-
 
     void updateColor(@ColorInt int color) {
         this.color = color;
