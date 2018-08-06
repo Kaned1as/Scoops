@@ -9,7 +9,6 @@ import android.support.annotation.StyleRes;
 
 import com.ftinc.scoop.R;
 
-import org.w3c.dom.Attr;
 
 /**
  * Project: ThemeEngineTest

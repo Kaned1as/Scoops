@@ -142,8 +142,12 @@ public class Scoop {
         // as status bar remains between fragment transitions
         StatusBarBinding oldSb =  oldLevel.getStatusBarBinding();
         StatusBarBinding curSb =  curLevel.getStatusBarBinding();
-        if (oldSb != null && curSb != null) {
+        if (curSb != null) {
+            // return to previous status bar value
             curSb.update(curLevel.toppings.get(curSb.getToppingId()).color);
+        } else if (oldSb != null && defaultColors.containsKey(oldSb.getToppingId())) {
+            // we don't have binding on lower level, back to default color before we unbind
+            oldSb.update(defaultColors.get(oldSb.getToppingId()));
         }
 
         // unbind everything from the old level
