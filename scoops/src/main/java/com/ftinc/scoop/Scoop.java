@@ -147,7 +147,7 @@ public class Scoop {
             curSb.update(curLevel.toppings.get(curSb.getToppingId()).color);
         } else if (oldSb != null && defaultColors.containsKey(oldSb.getToppingId())) {
             // we don't have binding on lower level, back to default color before we unbind
-            oldSb.update(defaultColors.get(oldSb.getToppingId()));
+            oldSb.update(defaultColors.get(oldSb.getToppingId()), false);
         }
 
         // unbind everything from the old level
