@@ -372,12 +372,9 @@ public class Scoop {
      * @return self for chaining.
      */
     public Scoop update(int toppingId, @ColorInt int color) {
-
-        // Get the topping
-        SparseArray<Topping> toppings = mLevels.peek().toppings;
         Map<Object, Set<AbstractBinding>> anchors = mLevels.peek().anchors;
 
-        Topping topping = toppings.get(toppingId);
+        Topping topping = getOrCreateTopping(toppingId);
         if (topping != null) {
             topping.updateColor(color);
 
