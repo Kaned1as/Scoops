@@ -122,15 +122,16 @@ public class Scoop {
             level = new StyleLevel(mLevels.peek());
         } else {
             level = new StyleLevel();
-        }
 
-        // populate level toppings with default colors
-        if (!defaultColors.isEmpty()) {
-            for (Map.Entry<Integer, Integer> entry : defaultColors.entrySet()) {
-                // key is ToppingId, value is Color
-                level.toppings.put(entry.getKey(), new Topping(entry.getKey(), entry.getValue()));
+            // populate level toppings with default colors
+            if (!defaultColors.isEmpty()) {
+                for (Map.Entry<Integer, Integer> entry : defaultColors.entrySet()) {
+                    // key is ToppingId, value is Color
+                    level.toppings.put(entry.getKey(), new Topping(entry.getKey(), entry.getValue()));
+                }
             }
         }
+
         mLevels.push(level);
     }
 
