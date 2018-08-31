@@ -17,12 +17,22 @@ public class StyleLevel {
     /**
      * Mapping topping id -> topping
      */
-    final SparseArray<Topping> toppings = new SparseArray<>();
+    final SparseArray<Topping> toppings;
 
     /**
      * Mapping object -> bound set
      */
-    final Map<Object, Set<AbstractBinding>> anchors = new HashMap<>();
+    final Map<Object, Set<AbstractBinding>> anchors;
+
+    public StyleLevel() {
+        this.toppings = new SparseArray<>();
+        this.anchors = new HashMap<>();
+    }
+
+    public StyleLevel(StyleLevel other) {
+        toppings = other.toppings.clone();
+        anchors = new HashMap<>(other.anchors);
+    }
 
     @Nullable
     public StatusBarBinding getStatusBarBinding() {

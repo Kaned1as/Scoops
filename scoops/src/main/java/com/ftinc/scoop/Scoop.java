@@ -116,7 +116,13 @@ public class Scoop {
 
     @UiThread
     public void addStyleLevel() {
-        StyleLevel level = new StyleLevel();
+        // clone previous level if we can
+        StyleLevel level;
+        if (!mLevels.isEmpty()) {
+            level = new StyleLevel(mLevels.peek());
+        } else {
+            level = new StyleLevel();
+        }
 
         // populate level toppings with default colors
         if (!defaultColors.isEmpty()) {
