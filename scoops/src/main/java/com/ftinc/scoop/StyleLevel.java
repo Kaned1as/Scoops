@@ -17,7 +17,7 @@ public class StyleLevel {
     /**
      * Mapping topping id -> topping
      */
-    final SparseArray<Topping> toppings;
+    final SparseArray<Topping> toppings = new SparseArray<>();
 
     /**
      * Mapping object -> bound set
@@ -25,11 +25,14 @@ public class StyleLevel {
     final Map<Object, Set<AbstractBinding>> anchors = new HashMap<>();
 
     public StyleLevel() {
-        this.toppings = new SparseArray<>();
     }
 
     public StyleLevel(StyleLevel other) {
-        toppings = other.toppings.clone();
+        for(int idx = 0; idx < other.toppings.size(); idx++) {
+            Integer id = other.toppings.keyAt(idx);
+            Topping clone = new Topping(other.toppings.valueAt(idx));
+            toppings.put(id, clone);
+        }
     }
 
     @Nullable

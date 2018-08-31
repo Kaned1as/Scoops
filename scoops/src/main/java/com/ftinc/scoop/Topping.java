@@ -27,6 +27,11 @@ public final class Topping {
     @ColorInt
     int color = 0;
 
+    Topping(Topping other) {
+        id = other.id;
+        color = other.color;
+    }
+
     Topping(int id) {
         this.id = id;
     }
