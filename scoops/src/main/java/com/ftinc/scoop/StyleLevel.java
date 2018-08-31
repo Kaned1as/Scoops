@@ -22,16 +22,14 @@ public class StyleLevel {
     /**
      * Mapping object -> bound set
      */
-    final Map<Object, Set<AbstractBinding>> anchors;
+    final Map<Object, Set<AbstractBinding>> anchors = new HashMap<>();
 
     public StyleLevel() {
         this.toppings = new SparseArray<>();
-        this.anchors = new HashMap<>();
     }
 
     public StyleLevel(StyleLevel other) {
         toppings = other.toppings.clone();
-        anchors = new HashMap<>(other.anchors);
     }
 
     @Nullable
