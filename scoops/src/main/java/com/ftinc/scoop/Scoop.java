@@ -45,10 +45,13 @@ public class Scoop {
 
     private static final String TAG = "Scoop";
 
-    private static Scoop sInstance = new Scoop();
+    private static class Holder {
+        private static Scoop sInstance = new Scoop();
+    }
+
 
     public static Scoop getInstance() {
-        return sInstance;
+        return Holder.sInstance;
     }
 
     private static Map<Integer, Integer> defaultColors = new HashMap<>();
