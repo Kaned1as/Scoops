@@ -47,6 +47,9 @@ public class StyleLevel {
         return null;
     }
 
+    /**
+     * Unbinds all collected bindings, usually done before deleting this level
+     */
     public void unbind() {
         for (Set<AbstractBinding> bindings: anchors.values()) {
             for (AbstractBinding binding: bindings) {
@@ -54,5 +57,17 @@ public class StyleLevel {
             }
         }
         anchors.clear();
+    }
+
+    /**
+     * Rebinds all toppings to respective objects, restoring colors
+     */
+    public void rebind() {
+        for (Set<AbstractBinding> bindings: anchors.values()) {
+            for (AbstractBinding binding: bindings) {
+                Topping topping = toppings.get(binding.getToppingId());
+                binding.update(topping.getColor());
+            }
+        }
     }
 }

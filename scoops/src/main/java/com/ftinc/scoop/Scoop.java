@@ -159,6 +159,7 @@ public class Scoop {
 
         // unbind everything from the old level
         oldLevel.unbind();
+        curLevel.rebind();
     }
 
     /**
