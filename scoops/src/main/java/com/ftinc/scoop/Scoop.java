@@ -51,7 +51,7 @@ public class Scoop {
         return sInstance;
     }
 
-    private Map<Integer, Integer> defaultColors = new HashMap<>();
+    private static Map<Integer, Integer> defaultColors = new HashMap<>();
 
     /**
      * Stack of style levels
@@ -70,9 +70,9 @@ public class Scoop {
         addStyleLevel(); // first and default style level
     }
 
-    public void initialize(Map<Integer, Integer> defaultColors) {
+    public static void initialize(Map<Integer, Integer> defaultColors) {
         // initialize default colors for new level
-        this.defaultColors.putAll(defaultColors);
+        Scoop.defaultColors.putAll(defaultColors);
     }
 
     @NonNull
