@@ -262,20 +262,47 @@ public class Scoop {
      * @return self for chaining
      */
     public Scoop bind(Object obj, int toppingId, View view) {
-        return bind(obj, toppingId, view, null);
+        return bind(obj, toppingId, view, view, null);
+    }
+
+    /**
+     * Bind a view to a topping on a given object
+     *
+     * @param obj       the class the view belongs to
+     * @param toppingId the id of the topping to bind to
+     * @param view      the view to bind
+     * @param parent    use it in case you bind view holders that are not yet attached to anything
+     * @return self for chaining
+     */
+    public Scoop bind(Object obj, int toppingId, View view, View parent) {
+        return bind(obj, toppingId, view, parent, null);
     }
 
     /**
      * Bind a view to a topping on a given object with a specified color adapter
      *
-     * @param obj          the classs the view belongs to
+     * @param obj          the object the view belongs to
+     * @param toppingId    the id of the topping
+     * @param view         the view to bind
+     * @param parent       use it in case you bind view holders that are not yet attached to anything
+     * @param colorAdapter the color adapter to bind with
+     * @return self for chaining
+     */
+    public Scoop bind(Object obj, int toppingId, View view, View parent, @Nullable ColorAdapter colorAdapter) {
+        return bind(obj, toppingId, view, parent, colorAdapter, null);
+    }
+
+    /**
+     * Bind a view to a topping on a given object with a specified color adapter
+     *
+     * @param obj          the object the view belongs to
      * @param toppingId    the id of the topping
      * @param view         the view to bind
      * @param colorAdapter the color adapter to bind with
      * @return self for chaining
      */
     public Scoop bind(Object obj, int toppingId, View view, @Nullable ColorAdapter colorAdapter) {
-        return bind(obj, toppingId, view, colorAdapter, null);
+        return bind(obj, toppingId, view, view, colorAdapter, null);
     }
 
     /**
@@ -285,14 +312,15 @@ public class Scoop {
      * @param obj          the class the view belongs to
      * @param toppingId    the id of the topping
      * @param view         the view to bind
+     * @param parent       use it in case you bind view holders that are not yet attached to anything
      * @param colorAdapter the color adapter to bind with
      * @param interpolator the interpolator to use when switching colors
      * @return self for chaining
      */
-    public Scoop bind(Object obj, int toppingId, View view, @Nullable ColorAdapter colorAdapter, @Nullable Interpolator interpolator) {
+    public Scoop bind(Object obj, int toppingId, View view, View parent, @Nullable ColorAdapter colorAdapter, @Nullable Interpolator interpolator) {
         StyleLevel allowed = null;
         for (StyleLevel level: mLevels) {
-            if (level.canBind(view)) {
+            if (level.canBind(parent)) {
                 allowed = level;
                 break;
             }
