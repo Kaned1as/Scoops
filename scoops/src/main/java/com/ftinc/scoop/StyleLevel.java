@@ -2,6 +2,8 @@ package com.ftinc.scoop;
 
 import android.support.annotation.Nullable;
 import android.util.SparseArray;
+import android.view.View;
+import android.view.ViewParent;
 import com.ftinc.scoop.binding.AbstractBinding;
 import com.ftinc.scoop.binding.StatusBarBinding;
 
@@ -24,6 +26,8 @@ public class StyleLevel {
      */
     final Map<Object, Set<AbstractBinding>> anchors = new HashMap<>();
 
+    private View root;
+
     public StyleLevel() {
     }
 
@@ -33,6 +37,30 @@ public class StyleLevel {
             Topping clone = new Topping(other.toppings.valueAt(idx));
             toppings.put(id, clone);
         }
+    }
+
+    /**
+     * Restrict scope of this style level. When views try to bind and they are not descendants of the root view,
+     * try to bind them to the level above.
+     * @param root view
+     */
+    public void restrictToDescendantsOf(View root) {
+        this.root = root;
+    }
+
+
+    public boolean canBind(View view) {
+        if (root == null)
+            return true;
+
+        View parent = view;
+        while (parent.getParent() != null && parent.getParent() instanceof View) {
+            if (parent == root)
+                return true;
+
+            parent = (View) parent.getParent();
+        }
+        return false;
     }
 
     @Nullable

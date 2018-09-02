@@ -70,7 +70,7 @@ public class Scoop {
      * Private constructor to prevent initialization
      */
     private Scoop() {
-        addStyleLevel(); // first and default style level
+        addStyleLevel(); // first and default style level, with no restrictions for views
     }
 
     public static void initialize(Map<Integer, Integer> defaultColors) {
@@ -119,6 +119,11 @@ public class Scoop {
 
     @UiThread
     public void addStyleLevel() {
+        addStyleLevel(null);
+    }
+
+    @UiThread
+    public void addStyleLevel(View root) {
         // clone previous level colors if we can
         StyleLevel level;
         if (!mLevels.isEmpty()) {
@@ -135,11 +140,27 @@ public class Scoop {
             }
         }
 
+        if (root != null) {
+            level.restrictToDescendantsOf(root);
+        }
         mLevels.push(level);
     }
 
-    @UiThread
+    /**
+     * Removes one style layer from the style stack, rebinding the underlying layer back to its views
+     */
     public void popStyleLevel() {
+        popStyleLevel(true);
+    }
+
+    /**
+     * Removes one style layer from the style stack
+     *
+     * @param rebind if true, restores colors of all views in current style level to their respective
+     *               values of this level. This is useful if you have bound views in both level layers
+     */
+    @UiThread
+    public void popStyleLevel(Boolean rebind) {
         if (mLevels.size() == 1) {
             // we can't get rid of top level
             throw new IllegalStateException("Requested to pop style level but only top level remains!");
@@ -162,7 +183,10 @@ public class Scoop {
 
         // unbind everything from the old level
         oldLevel.unbind();
-        curLevel.rebind();
+
+        if (rebind) {
+            curLevel.rebind();
+        }
     }
 
     /**
@@ -171,8 +195,8 @@ public class Scoop {
      * @param obj the object key for the bindings to look up
      * @return the set of bindings for the class
      */
-    private Set<AbstractBinding> getBindings(Object obj) {
-        Map<Object, Set<AbstractBinding>> anchors = mLevels.peek().anchors;
+    private Set<AbstractBinding> getBindings(StyleLevel level, Object obj) {
+        Map<Object, Set<AbstractBinding>> anchors = level.anchors;
         Set<AbstractBinding> bindings = anchors.get(obj);
         if (bindings == null) {
             bindings = new HashSet<>();
@@ -187,8 +211,8 @@ public class Scoop {
      * @param toppingId the id of the topping to get
      * @return the topping associated with the id
      */
-    private Topping getOrCreateTopping(int toppingId) {
-        SparseArray<Topping> toppings = mLevels.peek().toppings;
+    private Topping getOrCreateTopping(StyleLevel level, int toppingId) {
+        SparseArray<Topping> toppings = level.toppings;
         Topping topping = toppings.get(toppingId);
         if (topping == null) {
             topping = new Topping(toppingId);
@@ -230,28 +254,6 @@ public class Scoop {
     }
 
     /**
-     * Bind all the annotated elements to a given activity
-     *
-     * @param activity the activity to bind to
-     * @see BindTopping
-     * @see BindToppingStatus
-     */
-    public void bind(Activity activity) {
-        // Get the pre-generated bindings
-        List<AbstractBinding> bindings = getViewBinder(activity).bind(activity);
-
-        // Iterate and verify topping creation and auto-applying
-        for (AbstractBinding binding : bindings) {
-            Topping topping = getOrCreateTopping(binding.getToppingId());
-            autoUpdateBinding(binding, topping);
-        }
-
-        // add to system
-        Set<AbstractBinding> allBindings = getBindings(activity);
-        allBindings.addAll(bindings);
-    }
-
-    /**
      * Bind a view to a topping on a given object
      *
      * @param obj       the class the view belongs to
@@ -288,6 +290,16 @@ public class Scoop {
      * @return self for chaining
      */
     public Scoop bind(Object obj, int toppingId, View view, @Nullable ColorAdapter colorAdapter, @Nullable Interpolator interpolator) {
+        StyleLevel allowed = null;
+        for (StyleLevel level: mLevels) {
+            if (level.canBind(view)) {
+                allowed = level;
+                break;
+            }
+        }
+
+        if (allowed == null) // impossible scenario, top level is allowed for everything
+            return this; // skip bind completely
 
         // Get a default color adapter if not supplied
         if (colorAdapter == null) {
@@ -298,7 +310,7 @@ public class Scoop {
         AbstractBinding binding = new ViewBinding(toppingId, view, colorAdapter, interpolator);
 
         // Bind
-        return bind(obj, toppingId, binding);
+        return bind(obj, allowed, toppingId, binding);
     }
 
     /**
@@ -330,7 +342,7 @@ public class Scoop {
      */
     public Scoop bindStatusBar(Object obj, Activity activity, int toppingId, @Nullable Interpolator interpolator) {
         AbstractBinding binding = new StatusBarBinding(toppingId, activity, interpolator);
-        return bind(obj, toppingId, binding);
+        return bind(obj, mLevels.peek(), toppingId, binding);
     }
 
     /**
@@ -343,34 +355,35 @@ public class Scoop {
      * @param binding   the binding that defines how your custom properties are updated
      * @return self for chaining
      */
-    public Scoop bind(Object obj, int toppingId, AbstractBinding binding) {
+    public Scoop bind(Object obj, StyleLevel level, int toppingId, AbstractBinding binding) {
 
         // Find or Create Topping
-        Topping topping = getOrCreateTopping(toppingId);
+        Topping topping = getOrCreateTopping(level, toppingId);
 
         // If topping has a color set, auto-apply to binding
         autoUpdateBinding(binding, topping);
 
         // Store binding
-        Set<AbstractBinding> bindings = getBindings(obj);
+        Set<AbstractBinding> bindings = getBindings(level, obj);
         bindings.add(binding);
 
         return this;
     }
 
     /**
-     * Unbind all bindings on a certain class
+     * Unbind all bindings on a certain class for current style level
      *
      * @param obj the class/object that you previously made bindings to (i.e. an Activity, or Fragment)
      */
     public void unbind(Object obj) {
-        Set<AbstractBinding> bindings = getBindings(obj);
+        StyleLevel level = mLevels.peek();
+        Set<AbstractBinding> bindings = getBindings(level, obj);
         for (AbstractBinding binding : bindings) {
             binding.unbind();
         }
 
         // Clear the bindings out of the map
-        Map<Object, Set<AbstractBinding>> anchors = mLevels.peek().anchors;
+        Map<Object, Set<AbstractBinding>> anchors = level.anchors;
         anchors.remove(obj);
     }
 
@@ -383,19 +396,18 @@ public class Scoop {
      * @return self for chaining.
      */
     public Scoop update(int toppingId, @ColorInt int color) {
-        Map<Object, Set<AbstractBinding>> anchors = mLevels.peek().anchors;
+        StyleLevel current = mLevels.peek();
+        Map<Object, Set<AbstractBinding>> anchors = current.anchors;
 
-        Topping topping = getOrCreateTopping(toppingId);
-        if (topping != null) {
-            topping.updateColor(color);
+        Topping topping = getOrCreateTopping(current, toppingId);
+        topping.updateColor(color);
 
-            // Update bindings
-            Collection<Set<AbstractBinding>> bindings = anchors.values();
-            for (Set<AbstractBinding> bindingSet : bindings) {
-                for (AbstractBinding binding : bindingSet) {
-                    if (binding.getToppingId() == toppingId) {
-                        binding.update(topping.color);
-                    }
+        // Update bindings
+        Collection<Set<AbstractBinding>> bindings = anchors.values();
+        for (Set<AbstractBinding> bindingSet : bindings) {
+            for (AbstractBinding binding : bindingSet) {
+                if (binding.getToppingId() == toppingId) {
+                    binding.update(topping.color);
                 }
             }
         }
