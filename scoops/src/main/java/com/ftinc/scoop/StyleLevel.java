@@ -50,12 +50,13 @@ public class StyleLevel {
 
 
     public boolean canBind(View view) {
-        if (root == null)
+        if (root == null || view == root)
             return true;
 
+        // traverse parents
         View parent = view;
         while (parent.getParent() != null && parent.getParent() instanceof View) {
-            if (parent == root)
+            if (parent.getParent() == root)
                 return true;
 
             parent = (View) parent.getParent();
