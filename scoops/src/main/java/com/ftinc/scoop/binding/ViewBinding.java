@@ -1,5 +1,6 @@
 package com.ftinc.scoop.binding;
 
+import android.graphics.Color;
 import android.support.annotation.ColorInt;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -8,13 +9,15 @@ import android.view.animation.Interpolator;
 
 import com.ftinc.scoop.adapters.ColorAdapter;
 
+import java.lang.ref.WeakReference;
+
 /**
  * Created by r0adkll on 6/17/16.
  */
 
 public class ViewBinding extends AnimatedBinding {
 
-    private View mView;
+    private WeakReference<View> mView;
     private ColorAdapter<View> mColorAdapter;
 
     public ViewBinding(int toppingId,
@@ -22,7 +25,7 @@ public class ViewBinding extends AnimatedBinding {
                        @NonNull ColorAdapter<View> adapter,
                        @Nullable Interpolator interpolator){
         super(toppingId, interpolator);
-        mView = view;
+        mView = new WeakReference<>(view);
         mColorAdapter = adapter;
     }
 
@@ -32,7 +35,7 @@ public class ViewBinding extends AnimatedBinding {
                        @Nullable Interpolator interpolator,
                        long duration){
         super(toppingId, interpolator, duration);
-        mView = view;
+        mView = new WeakReference<>(view);
         mColorAdapter = adapter;
     }
 
@@ -44,11 +47,19 @@ public class ViewBinding extends AnimatedBinding {
 
     @Override
     int getCurrentColor() {
-        return mColorAdapter.getColor(mView);
+        View view = mView.get();
+        if (view != null) {
+            return mColorAdapter.getColor(view);
+        }
+
+        return Color.TRANSPARENT;
     }
 
     @Override
     void applyColor(@ColorInt int color) {
-        mColorAdapter.applyColor(mView, color);
+        View view = mView.get();
+        if (view != null) {
+            mColorAdapter.applyColor(view, color);
+        }
     }
 }
