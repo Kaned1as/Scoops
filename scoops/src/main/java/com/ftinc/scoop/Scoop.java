@@ -190,22 +190,6 @@ public class Scoop {
     }
 
     /**
-     * Get the set of bindings for a given class
-     *
-     * @param obj the object key for the bindings to look up
-     * @return the set of bindings for the class
-     */
-    private Set<AbstractBinding> getBindings(StyleLevel level, Object obj) {
-        Map<Object, Set<AbstractBinding>> anchors = level.anchors;
-        Set<AbstractBinding> bindings = anchors.get(obj);
-        if (bindings == null) {
-            bindings = new HashSet<>();
-            anchors.put(obj, bindings);
-        }
-        return bindings;
-    }
-
-    /**
      * Find the {@link Topping} object for it's given Id or create one if not found
      *
      * @param toppingId the id of the topping to get
@@ -256,60 +240,55 @@ public class Scoop {
     /**
      * Bind a view to a topping on a given object
      *
-     * @param obj       the class the view belongs to
      * @param toppingId the id of the topping to bind to
      * @param view      the view to bind
      * @return self for chaining
      */
-    public Scoop bind(Object obj, int toppingId, View view) {
-        return bind(obj, toppingId, view, view, null);
+    public Scoop bind(int toppingId, View view) {
+        return bind(toppingId, view, view, null);
     }
 
     /**
      * Bind a view to a topping on a given object
      *
-     * @param obj       the class the view belongs to
      * @param toppingId the id of the topping to bind to
      * @param view      the view to bind
      * @param parent    use it in case you bind view holders that are not yet attached to anything
      * @return self for chaining
      */
-    public Scoop bind(Object obj, int toppingId, View view, View parent) {
-        return bind(obj, toppingId, view, parent, null);
+    public Scoop bind(int toppingId, View view, View parent) {
+        return bind(toppingId, view, parent, null);
     }
 
     /**
      * Bind a view to a topping on a given object with a specified color adapter
      *
-     * @param obj          the object the view belongs to
      * @param toppingId    the id of the topping
      * @param view         the view to bind
      * @param parent       use it in case you bind view holders that are not yet attached to anything
      * @param colorAdapter the color adapter to bind with
      * @return self for chaining
      */
-    public Scoop bind(Object obj, int toppingId, View view, View parent, @Nullable ColorAdapter colorAdapter) {
-        return bind(obj, toppingId, view, parent, colorAdapter, null);
+    public Scoop bind(int toppingId, View view, View parent, @Nullable ColorAdapter colorAdapter) {
+        return bind(toppingId, view, parent, colorAdapter, null);
     }
 
     /**
      * Bind a view to a topping on a given object with a specified color adapter
      *
-     * @param obj          the object the view belongs to
      * @param toppingId    the id of the topping
      * @param view         the view to bind
      * @param colorAdapter the color adapter to bind with
      * @return self for chaining
      */
-    public Scoop bind(Object obj, int toppingId, View view, @Nullable ColorAdapter colorAdapter) {
-        return bind(obj, toppingId, view, view, colorAdapter, null);
+    public Scoop bind(int toppingId, View view, @Nullable ColorAdapter colorAdapter) {
+        return bind(toppingId, view, view, colorAdapter, null);
     }
 
     /**
      * Bind a view to a topping on a given object with a specified color adapter and change animation
      * interpolator
      *
-     * @param obj          the class the view belongs to
      * @param toppingId    the id of the topping
      * @param view         the view to bind
      * @param parent       use it in case you bind view holders that are not yet attached to anything
@@ -317,7 +296,7 @@ public class Scoop {
      * @param interpolator the interpolator to use when switching colors
      * @return self for chaining
      */
-    public Scoop bind(Object obj, int toppingId, View view, View parent, @Nullable ColorAdapter colorAdapter, @Nullable Interpolator interpolator) {
+    public Scoop bind(int toppingId, View view, View parent, @Nullable ColorAdapter colorAdapter, @Nullable Interpolator interpolator) {
         StyleLevel allowed = null;
         for (StyleLevel level: mLevels) {
             if (level.canBind(parent)) {
@@ -338,7 +317,7 @@ public class Scoop {
         AbstractBinding binding = new ViewBinding(toppingId, view, colorAdapter, interpolator);
 
         // Bind
-        return bind(obj, allowed, toppingId, binding);
+        return bind(allowed, toppingId, binding);
     }
 
     /**
@@ -347,13 +326,12 @@ public class Scoop {
      *
      * This does nothing on APIs < 21.
      *
-     * @param obj object in scope of which this binding is created
      * @param activity  the activity whoes status bar to bind to
      * @param toppingId the id of the topping to bind with
      * @return self for chaining
      */
-    public Scoop bindStatusBar(Object obj, Activity activity, int toppingId) {
-        return bindStatusBar(obj, activity, toppingId, null);
+    public Scoop bindStatusBar(Activity activity, int toppingId) {
+        return bindStatusBar(activity, toppingId, null);
     }
 
     /**
@@ -368,9 +346,9 @@ public class Scoop {
      * @param interpolator the interpolator that defines how the animation for the color change will run
      * @return self for chaining
      */
-    public Scoop bindStatusBar(Object obj, Activity activity, int toppingId, @Nullable Interpolator interpolator) {
+    public Scoop bindStatusBar(Activity activity, int toppingId, @Nullable Interpolator interpolator) {
         AbstractBinding binding = new StatusBarBinding(toppingId, activity, interpolator);
-        return bind(obj, mLevels.peek(), toppingId, binding);
+        return bind(mLevels.peek(), toppingId, binding);
     }
 
     /**
@@ -378,12 +356,11 @@ public class Scoop {
      * customize the changes between color on certain properties, i.e. Toppings, to define it
      * to your use case
      *
-     * @param obj       the object to bind on
      * @param toppingId the topping id to bind to
      * @param binding   the binding that defines how your custom properties are updated
      * @return self for chaining
      */
-    public Scoop bind(Object obj, StyleLevel level, int toppingId, AbstractBinding binding) {
+    public Scoop bind(StyleLevel level, int toppingId, AbstractBinding binding) {
 
         // Find or Create Topping
         Topping topping = getOrCreateTopping(level, toppingId);
@@ -392,27 +369,21 @@ public class Scoop {
         autoUpdateBinding(binding, topping);
 
         // Store binding
-        Set<AbstractBinding> bindings = getBindings(level, obj);
+        Set<AbstractBinding> bindings = level.anchors;
         bindings.add(binding);
 
         return this;
     }
 
     /**
-     * Unbind all bindings on a certain class for current style level
-     *
-     * @param obj the class/object that you previously made bindings to (i.e. an Activity, or Fragment)
+     * Unbind all bindings for current style level
      */
-    public void unbind(Object obj) {
+    public void unbind() {
         StyleLevel level = mLevels.peek();
-        Set<AbstractBinding> bindings = getBindings(level, obj);
+        Set<AbstractBinding> bindings = level.anchors;
         for (AbstractBinding binding : bindings) {
             binding.unbind();
         }
-
-        // Clear the bindings out of the map
-        Map<Object, Set<AbstractBinding>> anchors = level.anchors;
-        anchors.remove(obj);
     }
 
     /**
@@ -425,43 +396,14 @@ public class Scoop {
      */
     public Scoop update(int toppingId, @ColorInt int color) {
         StyleLevel current = mLevels.peek();
-        Map<Object, Set<AbstractBinding>> anchors = current.anchors;
 
         Topping topping = getOrCreateTopping(current, toppingId);
         topping.updateColor(color);
 
         // Update bindings
-        Collection<Set<AbstractBinding>> bindings = anchors.values();
-        for (Set<AbstractBinding> bindingSet : bindings) {
-            for (AbstractBinding binding : bindingSet) {
-                if (binding.getToppingId() == toppingId) {
-                    binding.update(topping.color);
-                }
-            }
-        }
-        return this;
-    }
-
-    /**
-     * Update a topping, i.e. color property, with a new color and therefore sending it out to
-     * bindings of object obj
-     *
-     * @param obj object to update toppings for.
-     * @param toppingId the id of the topping you wish to update
-     * @param color     the updated color to update to
-     * @return self for chaining.
-     */
-    public Scoop update(Object obj, int toppingId, @ColorInt int color) {
-        Map<Object, Set<AbstractBinding>> anchors = mLevels.peek().anchors;
-
-        // Update bindings
-        Set<AbstractBinding> bindings = anchors.get(obj);
-        if (bindings == null)
-            return this;
-
-        for (AbstractBinding binding : bindings) {
+        for (AbstractBinding binding : current.anchors) {
             if (binding.getToppingId() == toppingId) {
-                binding.update(color);
+                binding.update(topping.color);
             }
         }
         return this;

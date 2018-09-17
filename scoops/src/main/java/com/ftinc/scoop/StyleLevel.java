@@ -3,7 +3,6 @@ package com.ftinc.scoop;
 import android.support.annotation.Nullable;
 import android.util.SparseArray;
 import android.view.View;
-import android.view.ViewParent;
 import com.ftinc.scoop.binding.AbstractBinding;
 import com.ftinc.scoop.binding.StatusBarBinding;
 
@@ -24,7 +23,7 @@ public class StyleLevel {
     /**
      * Mapping object -> bound set
      */
-    final Map<Object, Set<AbstractBinding>> anchors = new HashMap<>();
+    final Set<AbstractBinding> anchors = new HashSet<>();
 
     private View root;
 
@@ -66,11 +65,9 @@ public class StyleLevel {
 
     @Nullable
     public StatusBarBinding getStatusBarBinding() {
-        for (Set<AbstractBinding> bindings: anchors.values()) {
-            for (AbstractBinding binding: bindings) {
-                if (binding instanceof StatusBarBinding) {
-                    return (StatusBarBinding) binding;
-                }
+        for (AbstractBinding binding: anchors) {
+            if (binding instanceof StatusBarBinding) {
+                return (StatusBarBinding) binding;
             }
         }
         return null;
@@ -80,10 +77,8 @@ public class StyleLevel {
      * Unbinds all collected bindings, usually done before deleting this level
      */
     public void unbind() {
-        for (Set<AbstractBinding> bindings: anchors.values()) {
-            for (AbstractBinding binding: bindings) {
-                binding.unbind();
-            }
+        for (AbstractBinding binding: anchors) {
+            binding.unbind();
         }
         anchors.clear();
     }
@@ -92,11 +87,9 @@ public class StyleLevel {
      * Rebinds all toppings to respective objects, restoring colors
      */
     public void rebind() {
-        for (Set<AbstractBinding> bindings: anchors.values()) {
-            for (AbstractBinding binding: bindings) {
-                Topping topping = toppings.get(binding.getToppingId());
-                binding.update(topping.getColor());
-            }
+        for (AbstractBinding binding: anchors) {
+            Topping topping = toppings.get(binding.getToppingId());
+            binding.update(topping.getColor());
         }
     }
 }
