@@ -5,7 +5,7 @@ buildscript {
         google()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:3.1.3'
+        classpath 'com.android.tools.build:gradle:3.2.1'
     }
 }
 
@@ -27,41 +27,32 @@ task clean(type: Delete) {
 
 project.ext.preDexLibs = !project.hasProperty('disablePreDex')
 project.plugins.whenPluginAdded { plugin ->
-    if ("com.android.build.gradle.AppPlugin".equals(plugin.class.name)) {
+    if ("com.android.build.gradle.AppPlugin" == plugin.class.name) {
         project.android.dexOptions.preDexLibraries = rootProject.ext.preDexLibs
-    } else if ("com.android.build.gradle.LibraryPlugin".equals(plugin.class.name)) {
+    } else if ("com.android.build.gradle.LibraryPlugin" == plugin.class.name) {
         project.android.dexOptions.preDexLibraries = rootProject.ext.preDexLibs
     }
 }
 
 ext {
     minSdkVersion = 16
-    targetSdkVersion = 27
-    compileSdkVersion = 27
-    sourceCompatibilityVersion = JavaVersion.VERSION_1_7
-    targetCompatibilityVersion = JavaVersion.VERSION_1_7
+    targetSdkVersion = 28
+    compileSdkVersion = 28
+    sourceCompatibilityVersion = JavaVersion.VERSION_1_8
+    targetCompatibilityVersion = JavaVersion.VERSION_1_8
 }
 
 ext.deps = [
         // Android
         android: 'com.google.android:android:4.1.1.4',
-        androidGradle: 'com.android.tools.build:gradle:3.1.3',
 
-        supportv4: 'com.android.support:support-v4:27.1.1',
-        supportAnnotations: 'com.android.support:support-annotations:27.1.1',
-        supportAppCompat: 'com.android.support:appcompat-v7:27.1.1',
-        supportRecyclerView: 'com.android.support:recyclerview-v7:27.1.1',
-        supportDesign: 'com.android.support:design:27.1.1',
-
-        butterknife: 'com.jakewharton:butterknife:8.0.1',
-        butterknifeCompiler: 'com.jakewharton:butterknife-compiler:8.0.1',
-        timber: 'com.jakewharton.timber:timber:4.1.2',
+        supportAnnotations: 'com.android.support:support-annotations:28.0.0',
+        supportAppCompat: 'com.android.support:appcompat-v7:28.0.0',
+        supportRecyclerView: 'com.android.support:recyclerview-v7:28.0.0',
+        supportDesign: 'com.android.support:design:28.0.0',
 
         // Square
         javapoet: 'com.squareup:javapoet:1.7.0',
-
-        // Third Party
-        javaparser: 'com.github.javaparser:javaparser-core:2.4.0',
 
         // Test dependencies
         mockito: 'org.mockito:mockito-core:1.10.19',
