@@ -209,7 +209,7 @@ public class Scoop {
     private void autoUpdateBinding(AbstractBinding binding, Topping topping) {
         if (topping.getColor() != 0) {
             if (binding instanceof AnimatedBinding) {
-                ((AnimatedBinding) binding).update(topping.color);
+                ((AnimatedBinding) binding).update(topping.color, false);
             } else {
                 binding.update(topping.color);
             }

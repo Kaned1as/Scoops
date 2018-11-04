@@ -38,6 +38,13 @@ public class StatusBarBinding extends AnimatedBinding {
     }
 
     @Override
+    public void update(Integer toColor, boolean animate) {
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            super.update(toColor, animate);
+        }
+    }
+
+    @Override
     public void unbind() {
         super.unbind();
         mActivity = null;
