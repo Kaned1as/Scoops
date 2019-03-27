@@ -7,7 +7,7 @@ import android.view.View;
  * An adapter that dictates how a color property or change is applied
  * to a given view
  */
-public interface ColorAdapter<T extends View> {
+public interface ColorAdapter<T> {
 
     /**
      * Apply the color to the given view

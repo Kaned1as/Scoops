@@ -3,7 +3,6 @@ package com.ftinc.scoop;
 import android.app.Activity;
 import android.support.annotation.ColorInt;
 import android.support.annotation.Nullable;
-import android.util.SparseArray;
 import android.view.View;
 import android.view.animation.Interpolator;
 import com.ftinc.scoop.adapters.ColorAdapter;
@@ -25,7 +24,7 @@ public class StyleLevel {
     /**
      * Mapping topping id -> topping
      */
-    final SparseArray<Topping> toppings = new SparseArray<>();
+    final Map<Integer, Topping> toppings = new HashMap<>();
 
     /**
      * Mapping object -> bound set
@@ -36,9 +35,9 @@ public class StyleLevel {
     }
 
     public StyleLevel(StyleLevel other) {
-        for(int idx = 0; idx < other.toppings.size(); idx++) {
-            Integer id = other.toppings.keyAt(idx);
-            Topping clone = new Topping(other.toppings.valueAt(idx));
+        for (Map.Entry<Integer, Topping> entry : other.toppings.entrySet()) {
+            Integer id = entry.getKey();
+            Topping clone = new Topping(entry.getValue());
             toppings.put(id, clone);
         }
     }

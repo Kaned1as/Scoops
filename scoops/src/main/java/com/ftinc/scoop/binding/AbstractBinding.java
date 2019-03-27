@@ -1,7 +1,7 @@
 package com.ftinc.scoop.binding;
 
 import android.support.annotation.ColorInt;
-import com.ftinc.scoop.Topping;
+
 
 /**
  * Project: ThemeEngineTest
