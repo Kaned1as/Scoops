@@ -2,8 +2,9 @@ package com.ftinc.scoop.adapters;
 
 import android.graphics.PorterDuff;
 import android.os.Build;
-import android.support.annotation.ColorInt;
 import android.widget.ImageView;
+
+import androidx.annotation.ColorInt;
 
 import com.ftinc.scoop.util.Utils;
 

@@ -2,8 +2,9 @@ package com.ftinc.scoop.util;
 
 import android.content.Context;
 import android.content.res.ColorStateList;
-import android.support.annotation.ColorInt;
 import android.util.TypedValue;
+
+import androidx.annotation.ColorInt;
 
 /**
  * Project: ThemeEngineTest

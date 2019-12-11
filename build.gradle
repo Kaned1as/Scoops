@@ -5,7 +5,7 @@ buildscript {
         google()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:3.3.2'
+        classpath 'com.android.tools.build:gradle:3.5.3'
     }
 }
 
@@ -25,15 +25,6 @@ task clean(type: Delete) {
     delete rootProject.buildDir
 }
 
-project.ext.preDexLibs = !project.hasProperty('disablePreDex')
-project.plugins.whenPluginAdded { plugin ->
-    if ("com.android.build.gradle.AppPlugin" == plugin.class.name) {
-        project.android.dexOptions.preDexLibraries = rootProject.ext.preDexLibs
-    } else if ("com.android.build.gradle.LibraryPlugin" == plugin.class.name) {
-        project.android.dexOptions.preDexLibraries = rootProject.ext.preDexLibs
-    }
-}
-
 ext {
     minSdkVersion = 16
     targetSdkVersion = 28
@@ -44,26 +35,6 @@ ext {
 
 ext.deps = [
         // Android
-        android: 'com.google.android:android:4.1.1.4',
-
-        supportAnnotations: 'com.android.support:support-annotations:28.0.0',
-        supportAppCompat: 'com.android.support:appcompat-v7:28.0.0',
-        supportRecyclerView: 'com.android.support:recyclerview-v7:28.0.0',
-        supportDesign: 'com.android.support:design:28.0.0',
-
-        // Square
-        javapoet: 'com.squareup:javapoet:1.7.0',
-
-        // Test dependencies
-        mockito: 'org.mockito:mockito-core:1.10.19',
-        junit: 'junit:junit:4.12',
-        truth: 'com.google.truth:truth:0.28',
-        robolectric: 'org.robolectric:robolectric:3.1',
-        compiletesting: 'com.google.testing.compile:compile-testing:0.9',
-        autoservice: 'com.google.auto.service:auto-service:1.0-rc2',
-        autocommon: 'com.google.auto:auto-common:0.6',
-
-        espresso: 'com.android.support.test.espresso:espresso-core:2.2.2',
-        espressoContrib: 'com.android.support.test.espresso:espresso-contrib:2.2.2',
-        runner: 'com.android.support.test:runner:0.5'
+        androidxLifecycle: 'androidx.lifecycle:lifecycle-common-java8:2.2.0-rc03',
+        androidxAnnotation: 'androidx.annotation:annotation:1.1.0',
 ]

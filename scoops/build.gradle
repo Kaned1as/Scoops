@@ -17,28 +17,17 @@ android {
         }
     }
 
-    sourceSets { main { res.srcDirs = ['src/main/res', 'src/androidTest/res'] } }
-
-
     lintOptions {
         abortOnError false
+    }
+
+    compileOptions {
+        sourceCompatibility rootProject.ext.sourceCompatibilityVersion
+        targetCompatibility rootProject.ext.targetCompatibilityVersion
     }
 }
 
 dependencies {
-    api project(':scoops-core')
-    implementation deps.supportAppCompat
-    implementation deps.supportRecyclerView
-
-    testImplementation deps.junit
-    testImplementation deps.truth
-    testImplementation deps.robolectric
-    testImplementation deps.mockito
-
-    androidTestImplementation deps.espresso
-    androidTestImplementation deps.runner
-    androidTestImplementation deps.supportAnnotations
-    androidTestImplementation deps.espressoContrib
+    compileOnly deps.androidxLifecycle
+    compileOnly deps.androidxAnnotation
 }
-
-apply from: rootProject.file('gradle/gradle-mvn-push.gradle')

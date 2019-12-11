@@ -1,7 +1,6 @@
 package com.ftinc.scoop.adapters;
 
-import android.support.annotation.ColorInt;
-import android.view.View;
+import androidx.annotation.ColorInt;
 
 /**
  * An adapter that dictates how a color property or change is applied

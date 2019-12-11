@@ -1,10 +1,15 @@
 package com.ftinc.scoop;
 
 import android.app.Activity;
-import android.support.annotation.ColorInt;
-import android.support.annotation.Nullable;
 import android.view.View;
 import android.view.animation.Interpolator;
+
+import androidx.annotation.ColorInt;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.lifecycle.DefaultLifecycleObserver;
+import androidx.lifecycle.LifecycleOwner;
+
 import com.ftinc.scoop.adapters.ColorAdapter;
 import com.ftinc.scoop.binding.AbstractBinding;
 import com.ftinc.scoop.binding.AnimatedBinding;
@@ -19,7 +24,7 @@ import java.util.*;
  * <p>
  * Created on 04.08.18
  */
-public class StyleLevel {
+public class StyleLevel implements DefaultLifecycleObserver {
 
     /**
      * Mapping topping id -> topping
@@ -29,7 +34,7 @@ public class StyleLevel {
     /**
      * Mapping object -> bound set
      */
-    final Set<AbstractBinding> anchors = new HashSet<>();
+    private final Set<AbstractBinding> anchors = new HashSet<>();
 
     public StyleLevel() {
     }
@@ -217,5 +222,25 @@ public class StyleLevel {
             }
         }
         return this;
+    }
+
+    @Override
+    public void onResume(@NonNull LifecycleOwner owner) {
+        for (AbstractBinding binding : anchors) {
+            binding.unpause();
+        }
+        rebind();
+    }
+
+    @Override
+    public void onPause(@NonNull LifecycleOwner owner) {
+        for (AbstractBinding binding : anchors) {
+            binding.pause();
+        }
+    }
+
+    @Override
+    public void onDestroy(@NonNull LifecycleOwner owner) {
+        unbind();
     }
 }

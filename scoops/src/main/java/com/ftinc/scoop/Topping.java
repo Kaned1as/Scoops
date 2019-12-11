@@ -1,6 +1,6 @@
 package com.ftinc.scoop;
 
-import android.support.annotation.ColorInt;
+import androidx.annotation.ColorInt;
 
 /**
  * Model object that represents a Color Property that the developer can subscribe to changes for

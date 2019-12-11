@@ -2,8 +2,9 @@ package com.ftinc.scoop.adapters;
 
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
-import android.support.annotation.ColorInt;
 import android.view.ViewGroup;
+
+import androidx.annotation.ColorInt;
 
 /**
  * Created by r0adkll on 6/17/16.

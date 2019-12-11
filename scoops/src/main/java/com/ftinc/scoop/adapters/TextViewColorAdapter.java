@@ -1,7 +1,8 @@
 package com.ftinc.scoop.adapters;
 
-import android.support.annotation.ColorInt;
 import android.widget.TextView;
+
+import androidx.annotation.ColorInt;
 
 /**
  * Created by r0adkll on 6/17/16.

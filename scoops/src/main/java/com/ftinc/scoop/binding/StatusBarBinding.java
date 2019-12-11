@@ -2,17 +2,10 @@ package com.ftinc.scoop.binding;
 
 import android.app.Activity;
 import android.os.Build;
-import android.support.annotation.ColorInt;
-import android.support.annotation.RequiresApi;
 import android.view.animation.Interpolator;
 
-import com.ftinc.scoop.Topping;
-
-/**
- * Project: ThemeEngineTest
- * Package: com.ftinc.scoop.model
- * Created by drew.heavner on 6/21/16.
- */
+import androidx.annotation.ColorInt;
+import androidx.annotation.RequiresApi;
 
 public class StatusBarBinding extends AnimatedBinding {
 
@@ -39,6 +32,10 @@ public class StatusBarBinding extends AnimatedBinding {
 
     @Override
     public void update(Integer toColor, boolean animate) {
+        if (isPaused()) {
+            return;
+        }
+
         if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             super.update(toColor, animate);
         }

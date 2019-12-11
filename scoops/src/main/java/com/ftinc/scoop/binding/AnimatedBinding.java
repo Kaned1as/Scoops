@@ -4,8 +4,9 @@ import android.animation.ArgbEvaluator;
 import android.animation.ValueAnimator;
 import android.graphics.Color;
 import android.os.Build;
-import android.support.annotation.ColorInt;
 import android.view.animation.Interpolator;
+
+import androidx.annotation.ColorInt;
 
 /**
  * Project: ThemeEngineTest
@@ -30,6 +31,10 @@ public abstract class AnimatedBinding extends AbstractBinding {
     }
 
     public void update(@ColorInt Integer toColor, boolean animate) {
+        if (isPaused()) {
+            return;
+        }
+
         int fromColor = getCurrentColor() != 0 ? getCurrentColor() : Color.TRANSPARENT;
 
         if (fromColor != toColor && animate) {
