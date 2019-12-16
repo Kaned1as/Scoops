@@ -225,6 +225,18 @@ public class StyleLevel implements DefaultLifecycleObserver {
     }
 
     @Override
+    public void onCreate(@NonNull LifecycleOwner owner) {
+    }
+
+    @Override
+    public void onStart(@NonNull LifecycleOwner owner) {
+    }
+
+    @Override
+    public void onStop(@NonNull LifecycleOwner owner) {
+    }
+
+    @Override
     public void onResume(@NonNull LifecycleOwner owner) {
         for (AbstractBinding binding : anchors) {
             binding.unpause();

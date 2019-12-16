@@ -29,8 +29,6 @@ ext {
     minSdkVersion = 16
     targetSdkVersion = 28
     compileSdkVersion = 28
-    sourceCompatibilityVersion = JavaVersion.VERSION_1_8
-    targetCompatibilityVersion = JavaVersion.VERSION_1_8
 }
 
 ext.deps = [
