@@ -1,5 +1,6 @@
 package com.ftinc.scoop;
 
+import androidx.annotation.Nullable;
 import androidx.annotation.UiThread;
 
 import java.util.*;
@@ -36,6 +37,14 @@ public class Scoop {
     public static void initialize(Map<Integer, Integer> defaultColors) {
         // initialize default colors for new level
         Scoop.defaultColors.putAll(defaultColors);
+    }
+
+    /**
+     * Sets main level to derive from. If you have it set, all new levels will
+     * be inherited from this one.
+     */
+    public void setLastLevel(@Nullable StyleLevel level) {
+        lastAddedLevel = level;
     }
 
     @UiThread
