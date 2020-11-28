@@ -48,8 +48,10 @@ public class ViewDrawableBinding extends AbstractBinding {
         }
 
         if (animate) {
-            TransitionDrawable transition = new TransitionDrawable(new Drawable[]{view.getBackground(), image});
-            transition.startTransition((int) mDurationMs);
+            TransitionDrawable crossfade = new TransitionDrawable(new Drawable[]{view.getBackground(), image});
+            view.setBackground(crossfade);
+
+            crossfade.startTransition((int) mDurationMs);
         } else {
             view.setBackground(image);
         }
