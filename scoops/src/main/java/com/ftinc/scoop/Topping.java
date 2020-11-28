@@ -32,6 +32,7 @@ public final class Topping {
     Topping(Topping other) {
         id = other.id;
         color = other.color;
+        drawable = other.drawable;
     }
 
     Topping(int id) {
