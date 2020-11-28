@@ -1,6 +1,9 @@
 package com.ftinc.scoop;
 
+import android.graphics.drawable.Drawable;
+
 import androidx.annotation.ColorInt;
+import androidx.annotation.Nullable;
 
 /**
  * Model object that represents a Color Property that the developer can subscribe to changes for
@@ -18,14 +21,13 @@ import androidx.annotation.ColorInt;
  */
 public final class Topping {
 
-    public static final int PRIMARY = 0;
-    public static final int PRIMARY_DARK = 1;
-    public static final int ACCENT = 2;
-
     final int id;
 
     @ColorInt
     int color = 0;
+
+    @Nullable
+    Drawable drawable = null;
 
     Topping(Topping other) {
         id = other.id;
@@ -51,6 +53,10 @@ public final class Topping {
 
     void updateColor(@ColorInt int color) {
         this.color = color;
+    }
+
+    void updateDrawable(@Nullable Drawable image) {
+        this.drawable = image;
     }
 
     @Override

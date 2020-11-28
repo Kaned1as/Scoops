@@ -1,6 +1,7 @@
 package com.ftinc.scoop;
 
 import android.app.Activity;
+import android.graphics.drawable.Drawable;
 import android.view.View;
 import android.view.animation.Interpolator;
 
@@ -12,9 +13,10 @@ import androidx.lifecycle.LifecycleOwner;
 
 import com.ftinc.scoop.adapters.ColorAdapter;
 import com.ftinc.scoop.binding.AbstractBinding;
-import com.ftinc.scoop.binding.AnimatedBinding;
+import com.ftinc.scoop.binding.AnimatedColorBinding;
 import com.ftinc.scoop.binding.StatusBarBinding;
 import com.ftinc.scoop.binding.ViewBinding;
+import com.ftinc.scoop.binding.ViewDrawableBinding;
 import com.ftinc.scoop.util.BindingUtils;
 
 import java.util.*;
@@ -74,6 +76,10 @@ public class StyleLevel implements DefaultLifecycleObserver {
         for (AbstractBinding binding: anchors) {
             Topping topping = toppings.get(binding.getToppingId());
             binding.update(topping.getColor());
+
+            if (binding instanceof ViewDrawableBinding) {
+                ((ViewDrawableBinding) binding).updateDrawable(topping.drawable);
+            }
         }
     }
 
@@ -96,7 +102,7 @@ public class StyleLevel implements DefaultLifecycleObserver {
      * @param colorAdapter the color adapter to bind with
      * @return self for chaining
      */
-    public StyleLevel bind(int toppingId, View view, @Nullable ColorAdapter colorAdapter) {
+    public StyleLevel bind(int toppingId, View view, @Nullable ColorAdapter<?> colorAdapter) {
         return bind(toppingId, view, colorAdapter, null);
     }
 
@@ -139,12 +145,27 @@ public class StyleLevel implements DefaultLifecycleObserver {
 
     /**
      * Bind the status bar of an activity to a topping so that it's color is updated when the
+     * user/developer updates the color for that topping id.
+     *
+     * This does nothing on APIs < 21.
+     *
+     * @param toppingId the id of the topping to bind with
+     * @param view view that should be updated to correct drawable
+     * @return self for chaining
+     */
+    public StyleLevel bindBgDrawable(int toppingId, View view) {
+        AbstractBinding binding = new ViewDrawableBinding(toppingId, view);
+        return bind(toppingId, binding);
+    }
+
+    /**
+     * Bind the status bar of an activity to a topping so that it's color is updated when the
      * user/developer updates the color for that topping id and animation it's color change using
      * the provided interpolator
      *
      * This does nothing on APIs < 21.
      *
-     * @param activity     the activity whoes status bar to bind to
+     * @param activity     the activity whose status bar to bind to
      * @param toppingId    the id of the topping to bind with
      * @param interpolator the interpolator that defines how the animation for the color change will run
      * @return self for chaining
@@ -195,8 +216,10 @@ public class StyleLevel implements DefaultLifecycleObserver {
 
     private void autoUpdateBinding(AbstractBinding binding, Topping topping) {
         if (topping.getColor() != 0) {
-            if (binding instanceof AnimatedBinding) {
-                ((AnimatedBinding) binding).update(topping.color, false);
+            if (binding instanceof AnimatedColorBinding) {
+                ((AnimatedColorBinding) binding).update(topping.color, false);
+            } else if (topping.drawable != null && binding instanceof ViewDrawableBinding) {
+                ((ViewDrawableBinding) binding).updateDrawable(topping.drawable, false);
             } else {
                 binding.update(topping.color);
             }
@@ -221,6 +244,20 @@ public class StyleLevel implements DefaultLifecycleObserver {
                 binding.update(topping.color);
             }
         }
+        return this;
+    }
+
+    public StyleLevel updateDrawable(int toppingId, Drawable image) {
+        Topping topping = getOrCreateTopping(toppingId);
+        topping.updateDrawable(image);
+
+
+        for (AbstractBinding binding : anchors) {
+            if (binding.getToppingId() == toppingId && binding instanceof ViewDrawableBinding) {
+                ((ViewDrawableBinding) binding).updateDrawable(image);
+            }
+        }
+
         return this;
     }
 

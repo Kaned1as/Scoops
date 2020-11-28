@@ -16,15 +16,15 @@ import java.lang.ref.WeakReference;
  * Created by r0adkll on 6/17/16.
  */
 
-public class ViewBinding extends AnimatedBinding {
+public class ViewBinding extends AnimatedColorBinding {
 
-    private WeakReference<View> mView;
-    private ColorAdapter<View> mColorAdapter;
+    private final WeakReference<View> mView;
+    private final ColorAdapter<View> mColorAdapter;
 
     public ViewBinding(int toppingId,
                        @NonNull View view,
                        @NonNull ColorAdapter<View> adapter,
-                       @Nullable Interpolator interpolator){
+                       @Nullable Interpolator interpolator) {
         super(toppingId, interpolator);
         mView = new WeakReference<>(view);
         mColorAdapter = adapter;
@@ -34,15 +34,15 @@ public class ViewBinding extends AnimatedBinding {
                        @NonNull View view,
                        @NonNull ColorAdapter adapter,
                        @Nullable Interpolator interpolator,
-                       long duration){
-        super(toppingId, interpolator, duration);
+                       long durationMs) {
+        super(toppingId, interpolator, durationMs);
         mView = new WeakReference<>(view);
         mColorAdapter = adapter;
     }
 
     @Override
     public void unbind() {
-        mView = null;
+        mView.clear();
         super.unbind();
     }
 

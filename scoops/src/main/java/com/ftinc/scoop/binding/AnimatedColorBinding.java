@@ -14,20 +14,20 @@ import androidx.annotation.ColorInt;
  * Created by drew.heavner on 6/21/16.
  */
 
-public abstract class AnimatedBinding extends AbstractBinding {
+public abstract class AnimatedColorBinding extends AbstractBinding {
 
     private ValueAnimator mAnimator;
     private Interpolator mInterpolator;
-    private long duration;
+    private final long mDurationMs;
 
-    public AnimatedBinding(int toppingId, Interpolator interpolator) {
+    public AnimatedColorBinding(int toppingId, Interpolator interpolator) {
         this(toppingId, interpolator, DEFAULT_ANIMATION_DURATION);
     }
 
-    public AnimatedBinding(int toppingId, Interpolator mInterpolator, long duration) {
+    public AnimatedColorBinding(int toppingId, Interpolator mInterpolator, long durationMs) {
         super(toppingId);
         this.mInterpolator = mInterpolator;
-        this.duration = duration;
+        this.mDurationMs = durationMs;
     }
 
     public void update(@ColorInt Integer toColor, boolean animate) {
@@ -45,11 +45,9 @@ public abstract class AnimatedBinding extends AbstractBinding {
             }
 
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                mAnimator = ValueAnimator.ofArgb(fromColor, toColor)
-                        .setDuration(duration);
+                mAnimator = ValueAnimator.ofArgb(fromColor, toColor).setDuration(mDurationMs);
             } else {
-                mAnimator = ValueAnimator.ofInt(fromColor, toColor)
-                        .setDuration(duration);
+                mAnimator = ValueAnimator.ofInt(fromColor, toColor).setDuration(mDurationMs);
                 mAnimator.setEvaluator(new ArgbEvaluator());
             }
 
