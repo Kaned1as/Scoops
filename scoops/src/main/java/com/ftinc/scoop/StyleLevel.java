@@ -14,6 +14,7 @@ import androidx.lifecycle.LifecycleOwner;
 
 import com.ftinc.scoop.adapters.ColorAdapter;
 import com.ftinc.scoop.binding.AbstractBinding;
+import com.ftinc.scoop.binding.AbstractDrawableBinding;
 import com.ftinc.scoop.binding.AnimatedColorBinding;
 import com.ftinc.scoop.binding.StatusBarBinding;
 import com.ftinc.scoop.binding.ViewBinding;
@@ -231,8 +232,8 @@ public class StyleLevel implements DefaultLifecycleObserver {
         if (topping.getColor() != 0) {
             if (binding instanceof AnimatedColorBinding) {
                 ((AnimatedColorBinding) binding).update(topping.color, false);
-            } else if (topping.drawable != null && binding instanceof ViewBgBinding) {
-                ((ViewBgBinding) binding).updateDrawable(topping.drawable, false);
+            } else if (topping.drawable != null && binding instanceof AbstractDrawableBinding) {
+                ((AbstractDrawableBinding) binding).updateDrawable(topping.drawable, false);
             } else {
                 binding.update(topping.color);
             }
