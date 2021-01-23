@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.graphics.drawable.Drawable;
 import android.view.View;
 import android.view.animation.Interpolator;
+import android.widget.ImageView;
 
 import androidx.annotation.ColorInt;
 import androidx.annotation.NonNull;
@@ -16,7 +17,8 @@ import com.ftinc.scoop.binding.AbstractBinding;
 import com.ftinc.scoop.binding.AnimatedColorBinding;
 import com.ftinc.scoop.binding.StatusBarBinding;
 import com.ftinc.scoop.binding.ViewBinding;
-import com.ftinc.scoop.binding.ViewDrawableBinding;
+import com.ftinc.scoop.binding.ViewBgBinding;
+import com.ftinc.scoop.binding.ViewImageBinding;
 import com.ftinc.scoop.util.BindingUtils;
 
 import java.util.*;
@@ -77,8 +79,8 @@ public class StyleLevel implements DefaultLifecycleObserver {
             Topping topping = toppings.get(binding.getToppingId());
             binding.update(topping.getColor());
 
-            if (binding instanceof ViewDrawableBinding) {
-                ((ViewDrawableBinding) binding).updateDrawable(topping.drawable);
+            if (binding instanceof ViewBgBinding) {
+                ((ViewBgBinding) binding).updateDrawable(topping.drawable);
             }
         }
     }
@@ -144,17 +146,28 @@ public class StyleLevel implements DefaultLifecycleObserver {
     }
 
     /**
-     * Bind the status bar of an activity to a topping so that it's color is updated when the
+     * Bind the background of any view so it is cross-faded after
      * user/developer updates the color for that topping id.
-     *
-     * This does nothing on APIs < 21.
      *
      * @param toppingId the id of the topping to bind with
      * @param view view that should be updated to correct drawable
      * @return self for chaining
      */
     public StyleLevel bindBgDrawable(int toppingId, View view) {
-        AbstractBinding binding = new ViewDrawableBinding(toppingId, view);
+        AbstractBinding binding = new ViewBgBinding(toppingId, view);
+        return bind(toppingId, binding);
+    }
+
+    /**
+     * Bind the src of any image view so it is cross-faded after
+     * user/developer updates the color for that topping id.
+     *
+     * @param toppingId the id of the topping to bind with
+     * @param view view that should be updated to correct drawable
+     * @return self for chaining
+     */
+    public StyleLevel bindImageDrawable(int toppingId, ImageView view) {
+        AbstractBinding binding = new ViewImageBinding(toppingId, view);
         return bind(toppingId, binding);
     }
 
@@ -218,8 +231,8 @@ public class StyleLevel implements DefaultLifecycleObserver {
         if (topping.getColor() != 0) {
             if (binding instanceof AnimatedColorBinding) {
                 ((AnimatedColorBinding) binding).update(topping.color, false);
-            } else if (topping.drawable != null && binding instanceof ViewDrawableBinding) {
-                ((ViewDrawableBinding) binding).updateDrawable(topping.drawable, false);
+            } else if (topping.drawable != null && binding instanceof ViewBgBinding) {
+                ((ViewBgBinding) binding).updateDrawable(topping.drawable, false);
             } else {
                 binding.update(topping.color);
             }
@@ -253,8 +266,8 @@ public class StyleLevel implements DefaultLifecycleObserver {
 
 
         for (AbstractBinding binding : anchors) {
-            if (binding.getToppingId() == toppingId && binding instanceof ViewDrawableBinding) {
-                ((ViewDrawableBinding) binding).updateDrawable(image);
+            if (binding.getToppingId() == toppingId && binding instanceof ViewBgBinding) {
+                ((ViewBgBinding) binding).updateDrawable(image);
             }
         }
 
