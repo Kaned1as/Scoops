@@ -1,5 +1,6 @@
 package com.ftinc.scoop;
 
+import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 
 import androidx.annotation.ColorInt;
@@ -24,7 +25,7 @@ public final class Topping {
     final int id;
 
     @ColorInt
-    int color = 0;
+    int color = Color.TRANSPARENT;
 
     @Nullable
     Drawable drawable = null;

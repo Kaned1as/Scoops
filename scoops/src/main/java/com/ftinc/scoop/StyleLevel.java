@@ -34,7 +34,7 @@ public class StyleLevel implements DefaultLifecycleObserver {
     /**
      * Mapping topping id -> topping
      */
-    final Map<Integer, Topping> toppings = new HashMap<>();
+    private final Map<Integer, Topping> toppings = new HashMap<>();
 
     /**
      * Mapping object -> bound set
@@ -218,7 +218,7 @@ public class StyleLevel implements DefaultLifecycleObserver {
      * @param toppingId the id of the topping to get
      * @return the topping associated with the id
      */
-    private Topping getOrCreateTopping(int toppingId) {
+    public Topping getOrCreateTopping(int toppingId) {
         Topping topping = toppings.get(toppingId);
         if (topping == null) {
             topping = new Topping(toppingId);

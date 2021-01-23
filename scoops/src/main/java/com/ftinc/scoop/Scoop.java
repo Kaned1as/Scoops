@@ -60,7 +60,8 @@ public class Scoop {
             if (!defaultColors.isEmpty()) {
                 for (Map.Entry<Integer, Integer> entry : defaultColors.entrySet()) {
                     // key is ToppingId, value is Color
-                    level.toppings.put(entry.getKey(), new Topping(entry.getKey(), entry.getValue()));
+                    Topping top = level.getOrCreateTopping(entry.getKey());
+                    top.color = entry.getValue();
                 }
             }
         }
