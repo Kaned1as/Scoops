@@ -1,5 +1,7 @@
 package com.ftinc.scoop.binding;
 
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.TransitionDrawable;
 import android.view.View;
@@ -25,20 +27,30 @@ public class ViewImageBinding extends AbstractDrawableBinding {
         this.mDurationMs = durationMs;
     }
 
-    public void updateDrawable(@Nullable Drawable image, boolean animate) {
+    public void updateDrawable(@Nullable Drawable next, boolean animate) {
         ImageView view = (ImageView) mView.get();
-        if (view == null || image == null) {
+        if (view == null) {
+            // nothing to update
             return;
         }
 
+        if (next == null) {
+            next = new ColorDrawable(Color.TRANSPARENT);
+        }
+
+        Drawable prev = view.getDrawable();
+        if (prev == null) {
+            prev = new ColorDrawable(Color.TRANSPARENT);
+        }
+
         if (animate) {
-            TransitionDrawable crossfade = new TransitionDrawable(new Drawable[]{view.getBackground(), image});
+            TransitionDrawable crossfade = new TransitionDrawable(new Drawable[]{prev, next});
             crossfade.setCrossFadeEnabled(true);
             view.setImageDrawable(crossfade);
 
             crossfade.startTransition((int) mDurationMs);
         } else {
-            view.setImageDrawable(image);
+            view.setImageDrawable(next);
         }
     }
 }
