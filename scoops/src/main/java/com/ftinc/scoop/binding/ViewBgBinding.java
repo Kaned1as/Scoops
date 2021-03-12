@@ -36,6 +36,8 @@ public class ViewBgBinding extends AbstractDrawableBinding {
 
         if (next == null) {
             next = new ColorDrawable(Color.TRANSPARENT);
+        } else {
+            next = next.mutate();
         }
 
         Drawable prev = view.getBackground();
