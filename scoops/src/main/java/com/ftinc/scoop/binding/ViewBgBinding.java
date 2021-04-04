@@ -1,6 +1,7 @@
 package com.ftinc.scoop.binding;
 
 import android.graphics.Color;
+import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.TransitionDrawable;
@@ -35,6 +36,8 @@ public class ViewBgBinding extends AbstractDrawableBinding {
         }
 
         if (next == null) {
+            next = new ColorDrawable(Color.TRANSPARENT);
+        } else if (next instanceof BitmapDrawable && ((BitmapDrawable) next).getBitmap().isRecycled()) {
             next = new ColorDrawable(Color.TRANSPARENT);
         } else {
             next = next.mutate();
